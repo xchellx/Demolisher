@@ -19,11 +19,12 @@ There is an option to invert the pitch controls.
 
 ### Render Flags
 
-There are certain flags and data in the BIN model format for graph objects that can be optionally displayed in _Demolisher_.
+There are certain flags and data in the BIN model format for graph objects which are displayed in _Demolisher_ (some of which can be toggled).
 The supported ones are as follows:
 
 - Ceilings
 - Fourth walls (or any object that is shown only in the GBH view)
+- Full-bright (such as lamps).
 - Bounding boxes
 
 As well as the visibility flags above, you can set the individual visibility of each loaded BIN model and their graph objects.
@@ -37,6 +38,5 @@ _Demolisher_ also supports the following:
 - Unit grid (X/Z axis)
 - Texture alpha (cut-off and blend)
 - Emboss-mapped surfaces (`emboss.fp` and `emboss.vp`).
-- Full-bright graph objects (such as lamps).
 
 _Demolisher_ supports _only_ BIN models — BDL and BMD are not supported; however, you may open and view any number of BIN model files at a single time.
