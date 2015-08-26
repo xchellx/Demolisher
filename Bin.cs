@@ -386,51 +386,61 @@ namespace arookas.Demolisher
 		}
 		void RenderGraphObject(GraphObject graphObject, RenderFlags renderFlags)
 		{
-			if (graphObject.Visible &&
-				!(!renderFlags.HasFlag(RenderFlags.Ceilings) && graphObject.HasRenderFlag(GraphObjectRenderFlags.Ceiling)) &&
-				!(!renderFlags.HasFlag(RenderFlags.FourthWalls) && graphObject.HasRenderFlag(GraphObjectRenderFlags.FourthWall)))
+			// visibility check
+			if (!graphObject.Visible)
 			{
-				GL.PushMatrix();
-				TransformMatrix(graphObject.Position, graphObject.Rotation, graphObject.Scale);
-
-				// bounding box
-				if (renderFlags.HasFlag(RenderFlags.BoundingBox))
-				{
-					GL.Disable(EnableCap.Lighting);
-					GL.Disable(EnableCap.Texture2D);
-					GL.Color3(Color.Yellow);
-					GLUtility.WireCube(graphObject.BoundingBox * GlobalScaleReciprocal);
-					GL.Color3(Color.White);
-					GL.Enable(EnableCap.Texture2D);
-					GL.Enable(EnableCap.Lighting);
-				}
-
-				if (graphObject.HasRenderFlag(GraphObjectRenderFlags.FullBright))
-				{
-					GL.Disable(EnableCap.Lighting);
-				}
-
-				// Render parts.
-				foreach (var part in graphObject)
-				{
-					if (shaders[part.ShaderIndex].Tint.A > 0 && ((shaders[part.ShaderIndex].Tint.A == Color.Opaque && renderFlags.HasFlag(RenderFlags.Opaque)) || (shaders[part.ShaderIndex].Tint.A < Color.Opaque && renderFlags.HasFlag(RenderFlags.Translucent))))
-					{
-						RenderPart(part, renderFlags);
-					}
-				}
-
-				GL.Enable(EnableCap.Lighting);
-
-				// Render children.
-				for (int childIndex = graphObject.ChildIndex; childIndex >= 0; childIndex = graphObjects[childIndex].NextIndex)
-				{
-					RenderGraphObject(graphObjects[childIndex], renderFlags);
-				}
-
-				GL.PopMatrix();
+				return;
+			}
+			
+			// render-flag check
+			if (!renderFlags.HasFlag(RenderFlags.Ceilings) && graphObject.HasRenderFlag(GraphObjectRenderFlags.Ceiling))
+			{
+				return;
+			}
+			if (!renderFlags.HasFlag(RenderFlags.FourthWalls) && graphObject.HasRenderFlag(GraphObjectRenderFlags.FourthWall))
+			{
+				return;
 			}
 
-			// TODO: move render children here?
+			// matrix transformations
+			GL.PushMatrix();
+			TransformMatrix(graphObject.Position, graphObject.Rotation, graphObject.Scale);
+
+			// bounding box
+			if (renderFlags.HasFlag(RenderFlags.BoundingBox))
+			{
+				GL.Disable(EnableCap.Lighting);
+				GL.Disable(EnableCap.Texture2D);
+				GL.Color3(Color.Yellow);
+				GLUtility.WireCube(graphObject.BoundingBox * GlobalScaleReciprocal);
+				GL.Color3(Color.White);
+				GL.Enable(EnableCap.Texture2D);
+				GL.Enable(EnableCap.Lighting);
+			}
+
+			if (graphObject.HasRenderFlag(GraphObjectRenderFlags.FullBright))
+			{
+				GL.Disable(EnableCap.Lighting);
+			}
+
+			// Render parts.
+			foreach (var part in graphObject)
+			{
+				if (shaders[part.ShaderIndex].Tint.A > 0 && ((shaders[part.ShaderIndex].Tint.A == Color.Opaque && renderFlags.HasFlag(RenderFlags.Opaque)) || (shaders[part.ShaderIndex].Tint.A < Color.Opaque && renderFlags.HasFlag(RenderFlags.Translucent))))
+				{
+					RenderPart(part, renderFlags);
+				}
+			}
+
+			GL.Enable(EnableCap.Lighting);
+
+			// Render children.
+			for (int childIndex = graphObject.ChildIndex; childIndex >= 0; childIndex = graphObjects[childIndex].NextIndex)
+			{
+				RenderGraphObject(graphObjects[childIndex], renderFlags);
+			}
+
+			GL.PopMatrix();
 		}
 		void RenderPart(Part part, RenderFlags renderFlags)
 		{

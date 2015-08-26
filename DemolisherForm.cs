@@ -13,13 +13,7 @@ namespace arookas.Demolisher
 	internal partial class DemolisherForm : Form
 	{
 		// state
-		Matrix4 CameraMatrix
-		{
-			get
-			{
-				return Matrix4.LookAt(camera.pos.X, camera.pos.Y, camera.pos.Z, camera.pos.X, camera.pos.Y, camera.pos.Z + 100.0f, 0.0f, 1.0f, 0.0f);
-			}
-		}
+		Matrix4 CameraMatrix { get { return Matrix4.LookAt(camera.pos.X, camera.pos.Y, camera.pos.Z, camera.pos.X, camera.pos.Y, camera.pos.Z + 100.0f, 0.0f, 1.0f, 0.0f); } }
 		Viewpoint camera = new Viewpoint() { pos = Vector3D.UnitZ + new Vector3D(0.0f, 0.75f, 0.0f), rot = new Vector3D(30.0f, 180.0f, 0.0f) };
 		ADictionary<Keys, bool> input = new ADictionary<Keys, bool>();
 		List<Bin> loadedModels = new List<Bin>();
@@ -37,20 +31,8 @@ namespace arookas.Demolisher
 		PolygonMode polygonMode = PolygonMode.Fill;
 
 		// util
-		bool HasModelsLoaded
-		{
-			get
-			{
-				return (loadedModels.Count > 0);
-			}
-		}
-		string TitleSuffix
-		{
-			get
-			{
-				return String.Format("Demolisher v{0} arookas", Program.Version);
-			}
-		}
+		bool HasModelsLoaded { get { return (loadedModels.Count > 0); } }
+		string TitleSuffix { get { return String.Format("Demolisher v{0} arookas", Program.Version); } }
 
 		public DemolisherForm()
 		{
@@ -186,11 +168,29 @@ namespace arookas.Demolisher
 			GL.Light(LightName.Light0, LightParameter.Position, new Vector4(camera.pos.ToVector3(), 1.0f));
 			GL.Enable(EnableCap.Light0);
 
-			// Render model (opaque first, then translucent).
+			// Render models (opaque first, then translucent).
 			if (HasModelsLoaded)
 			{
-				loadedModels.ForEach(model => model.Render(RenderFlags.Opaque | (showBoundingBoxes ? RenderFlags.BoundingBox : RenderFlags.None) | (showCeilings ? RenderFlags.Ceilings : RenderFlags.None) | (showFourthWalls ? RenderFlags.FourthWalls : RenderFlags.None) | (showNBT ? RenderFlags.NBT : RenderFlags.None)));
-				loadedModels.ForEach(model => model.Render(RenderFlags.Translucent | (showBoundingBoxes ? RenderFlags.BoundingBox : RenderFlags.None) | (showCeilings ? RenderFlags.Ceilings : RenderFlags.None) | (showFourthWalls ? RenderFlags.FourthWalls : RenderFlags.None) | (showNBT ? RenderFlags.NBT : RenderFlags.None)));
+				RenderFlags flags = RenderFlags.None;
+				if (showBoundingBoxes)
+				{
+					flags |= RenderFlags.BoundingBox;
+				}
+				if (showCeilings)
+				{
+					flags |= RenderFlags.Ceilings;
+				}
+				if (showFourthWalls)
+				{
+					flags |= RenderFlags.FourthWalls;
+				}
+				if (showNBT)
+				{
+					flags |= RenderFlags.NBT;
+				}
+
+				loadedModels.ForEach(model => model.Render(RenderFlags.Opaque | flags));
+				loadedModels.ForEach(model => model.Render(RenderFlags.Translucent | flags));
 			}
 
 			// Render grid.
