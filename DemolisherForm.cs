@@ -75,8 +75,6 @@ namespace Arookas.Demolisher
 			if (fileName.EndsWith(".bin", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Bin bin = new Bin(fileName, pos, rot, scale);
-				loadedModels.Add(bin);
-
 				TreeNode binNode = new TreeNode()
 				{
 					Checked = true,
@@ -85,9 +83,13 @@ namespace Arookas.Demolisher
 				};
 
 				LoadBINNode(binNode.Nodes, bin, 0);
-				tvw_models.Nodes.Add(binNode);
 
+				tvw_models.BeginUpdate();
+				tvw_models.Nodes.Add(binNode);
+				tvw_models.EndUpdate();
 				gl_frame.Invalidate();
+
+				loadedModels.Add(bin);
 			}
 
 			SetTitle();
@@ -117,23 +119,19 @@ namespace Arookas.Demolisher
 
 		void LoadBINNode(TreeNodeCollection nodes, Bin bin, int index)
 		{
-			TreeNode childNode = new TreeNode()
+			for (int childIndex = bin[index].ChildIndex; childIndex >= 0; childIndex = bin[childIndex].NextIndex)
 			{
-				Checked = true,
-				Text = String.Format("Object {0}", index),
-				Tag = bin[index],
-			};
-
-			for (int childIndex = bin[index].ChildIndex; childIndex >= 0; childIndex = bin[childIndex].ChildIndex)
-			{
-				LoadBINNode(childNode.Nodes, bin, childIndex);
-			}
-
-			nodes.Add(childNode);
-
-			if (bin[index].NextIndex >= 0)
-			{
-				LoadBINNode(nodes, bin, bin[index].NextIndex);
+				TreeNode node = new TreeNode()
+				{
+					Checked = true,
+					Text = String.Format("Object {0}", childIndex),
+					Tag = bin[childIndex],
+				};
+				if (bin[childIndex].ChildIndex >= 0)
+				{
+					LoadBINNode(node.Nodes, bin, bin[childIndex].ChildIndex);
+				}
+				nodes.Add(node);
 			}
 		}
 		public void SetTitle()
