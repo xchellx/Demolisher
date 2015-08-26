@@ -47,6 +47,7 @@
 			this.str_main = new System.Windows.Forms.ToolStrip();
 			this.btn_import = new System.Windows.Forms.ToolStripButton();
 			this.btn_unload = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.men_main.SuspendLayout();
 			this.pan_controls.SuspendLayout();
 			this.str_main.SuspendLayout();
@@ -101,15 +102,16 @@
 			// men_view
 			// 
 			this.men_view.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btn_invertLook,
+            this.toolStripSeparator2,
             this.btn_alphatest,
             this.btn_bbox,
             this.btn_grid,
-            this.btn_invertLook,
+            this.btn_nbt,
             this.btn_wireframe,
             this.toolStripSeparator1,
             this.btn_ceilings,
-            this.btn_fourthwalls,
-            this.btn_nbt});
+            this.btn_fourthwalls});
 			this.men_view.Name = "men_view";
 			this.men_view.Size = new System.Drawing.Size(44, 20);
 			this.men_view.Text = "View";
@@ -125,7 +127,6 @@
 			this.btn_alphatest.Text = "Alpha Test";
 			this.btn_alphatest.ToolTipText = "If checked, textures with alpha will be rendered using AlphaTest; otherwise, they" +
     " will be rendered with Blend.";
-			this.btn_alphatest.Visible = false;
 			this.btn_alphatest.CheckedChanged += new System.EventHandler(this.btn_alphatest_CheckedChanged);
 			// 
 			// btn_bbox
@@ -206,7 +207,7 @@
 			// 
 			this.btn_nbt.CheckOnClick = true;
 			this.btn_nbt.Name = "btn_nbt";
-			this.btn_nbt.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.N)));
+			this.btn_nbt.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.btn_nbt.Size = new System.Drawing.Size(200, 22);
 			this.btn_nbt.Text = "NBT";
 			this.btn_nbt.ToolTipText = "If checked, normals (red), binormals (blue), and tangents (green) of each vertex " +
@@ -266,6 +267,11 @@
 			this.btn_unload.ToolTipText = "Unload the select BIN model";
 			this.btn_unload.Click += new System.EventHandler(this.btn_unload_Click);
 			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(197, 6);
+			// 
 			// DemolisherForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,5 +317,6 @@
 		private System.Windows.Forms.ToolStripMenuItem btn_fourthwalls;
 		private System.Windows.Forms.ToolStripMenuItem btn_ceilings;
 		private System.Windows.Forms.ToolStripMenuItem btn_nbt;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }
