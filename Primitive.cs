@@ -1,11 +1,11 @@
-﻿using Arookas.Collections;
-using Arookas.IO.Binary;
+﻿using arookas.Collections;
+using arookas.IO.Binary;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Arookas.Demolisher
+namespace arookas.Demolisher
 {
 	class Primitive : IEnumerable<Vertex>
 	{

@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace Arookas.Demolisher
+namespace arookas.Demolisher
 {
 	struct BoundingBox
 	{

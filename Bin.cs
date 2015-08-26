@@ -1,5 +1,5 @@
-﻿using Arookas.Collections;
-using Arookas.IO.Binary;
+﻿using arookas.Collections;
+using arookas.IO.Binary;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Arookas.Demolisher
+namespace arookas.Demolisher
 {
 	class Bin : IRenderable, IDisposable
 	{

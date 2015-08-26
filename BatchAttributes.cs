@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arookas.Demolisher
+namespace arookas.Demolisher
 {
 	[Flags]
 	enum BatchAttributes : uint // same order as GX

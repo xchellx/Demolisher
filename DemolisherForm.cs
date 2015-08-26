@@ -1,14 +1,14 @@
-﻿using Arookas.Collections;
-using Arookas.Math;
+﻿using arookas.Collections;
+using arookas.Math;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using AQuaternion = Arookas.Math.Quaternion;
+using AQuaternion = arookas.Math.Quaternion;
 
-namespace Arookas.Demolisher
+namespace arookas.Demolisher
 {
 	internal partial class DemolisherForm : Form
 	{

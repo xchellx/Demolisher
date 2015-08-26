@@ -1,6 +1,6 @@
-﻿using Arookas.Math;
+﻿using arookas.Math;
 
-namespace Arookas.Demolisher
+namespace arookas.Demolisher
 {
 	struct Viewpoint
 	{
