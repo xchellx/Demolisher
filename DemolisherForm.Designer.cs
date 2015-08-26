@@ -233,6 +233,7 @@
 			this.tvw_models.Size = new System.Drawing.Size(240, 455);
 			this.tvw_models.TabIndex = 4;
 			this.tvw_models.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tvw_models_AfterCheck);
+			this.tvw_models.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvw_models_AfterSelect);
 			// 
 			// str_main
 			// 

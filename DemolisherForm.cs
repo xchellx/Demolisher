@@ -97,6 +97,10 @@ namespace Arookas.Demolisher
 			bin.Dispose();
 			loadedModels.Remove(bin);
 			tvw_models.Nodes.Remove(tvw_models.Nodes.Cast<TreeNode>().First(node => node.Tag == bin));
+			if (tvw_models.Nodes.Count == 0)
+			{
+				tvw_models_AfterSelect(null, new TreeViewEventArgs(null));
+			}
 			gl_frame.Invalidate();
 			SetTitle();
 		}
@@ -438,6 +442,11 @@ namespace Arookas.Demolisher
 		{
 			InitViewport();
 			gl_frame.Invalidate();
+		}
+
+		private void tvw_models_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			btn_unload.Enabled = !(e.Node == null || !(e.Node.Tag is Bin));
 		}
 	}
 }
