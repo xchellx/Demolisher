@@ -37,6 +37,6 @@ _Demolisher_ also supports the following:
 - Wireframe view
 - Unit grid (X/Z axis)
 - Texture alpha (cut-off and blend)
-- Emboss-mapped surfaces (`emboss.fp` and `emboss.vp`)
+- Emboss-mapped surfaces ([emboss.fp](https://github.com/arookas/Demolisher/blob/master/Shaders/emboss.fp) and [emboss.vp](https://github.com/arookas/Demolisher/blob/master/Shaders/emboss.vp))
 
 _Demolisher_ supports _only_ BIN models — BDL and BMD are not supported; however, you may open and view any number of BIN model files at a single time.
