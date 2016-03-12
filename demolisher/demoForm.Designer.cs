@@ -1,7 +1,5 @@
-﻿namespace arookas.Demolisher
-{
-	partial class DemolisherForm
-	{
+﻿namespace arookas {
+	partial class demoForm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -11,10 +9,8 @@
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
+		protected override void Dispose(bool disposing) {
+			if (disposing && (components != null)) {
 				components.Dispose();
 			}
 			base.Dispose(disposing);
@@ -26,8 +22,7 @@
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent()
-		{
+		private void InitializeComponent() {
 			this.gl_frame = new OpenTK.GLControl();
 			this.men_main = new System.Windows.Forms.MenuStrip();
 			this.men_file = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,20 +58,20 @@
 			this.gl_frame.Size = new System.Drawing.Size(640, 480);
 			this.gl_frame.TabIndex = 0;
 			this.gl_frame.VSync = true;
-			this.gl_frame.Load += new System.EventHandler(this.gl_frame_Load);
-			this.gl_frame.DragDrop += new System.Windows.Forms.DragEventHandler(this.gl_frame_DragDrop);
-			this.gl_frame.DragEnter += new System.Windows.Forms.DragEventHandler(this.gl_frame_DragEnter);
-			this.gl_frame.Paint += new System.Windows.Forms.PaintEventHandler(this.gl_frame_Paint);
-			this.gl_frame.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gl_frame_KeyDown);
-			this.gl_frame.KeyUp += new System.Windows.Forms.KeyEventHandler(this.gl_frame_KeyUp);
-			this.gl_frame.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.gl_frame_PreviewKeyDown);
-			this.gl_frame.Resize += new System.EventHandler(this.gl_frame_Resize);
+			this.gl_frame.Load += new System.EventHandler(this.evGLLoad);
+			this.gl_frame.DragDrop += new System.Windows.Forms.DragEventHandler(this.evGLDragDrop);
+			this.gl_frame.DragEnter += new System.Windows.Forms.DragEventHandler(this.evGLDragEnter);
+			this.gl_frame.Paint += new System.Windows.Forms.PaintEventHandler(this.evGLRender);
+			this.gl_frame.KeyDown += new System.Windows.Forms.KeyEventHandler(this.evGLKeyDown);
+			this.gl_frame.KeyUp += new System.Windows.Forms.KeyEventHandler(this.evGLKeyUp);
+			this.gl_frame.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.evGLPreviewKey);
+			this.gl_frame.Resize += new System.EventHandler(this.evGLResize);
 			// 
 			// men_main
 			// 
 			this.men_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.men_file,
-            this.men_view});
+						this.men_file,
+						this.men_view});
 			this.men_main.Location = new System.Drawing.Point(0, 0);
 			this.men_main.Name = "men_main";
 			this.men_main.Size = new System.Drawing.Size(880, 24);
@@ -86,7 +81,7 @@
 			// men_file
 			// 
 			this.men_file.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_open});
+						this.btn_open});
 			this.men_file.Name = "men_file";
 			this.men_file.Size = new System.Drawing.Size(37, 20);
 			this.men_file.Text = "File";
@@ -97,21 +92,21 @@
 			this.btn_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.btn_open.Size = new System.Drawing.Size(155, 22);
 			this.btn_open.Text = "Open...";
-			this.btn_open.Click += new System.EventHandler(this.btn_open_Click);
+			this.btn_open.Click += new System.EventHandler(this.evClickOpen);
 			// 
 			// men_view
 			// 
 			this.men_view.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_invertLook,
-            this.toolStripSeparator2,
-            this.btn_alphatest,
-            this.btn_bbox,
-            this.btn_grid,
-            this.btn_nbt,
-            this.btn_wireframe,
-            this.toolStripSeparator1,
-            this.btn_ceilings,
-            this.btn_fourthwalls});
+						this.btn_invertLook,
+						this.toolStripSeparator2,
+						this.btn_alphatest,
+						this.btn_bbox,
+						this.btn_grid,
+						this.btn_nbt,
+						this.btn_wireframe,
+						this.toolStripSeparator1,
+						this.btn_ceilings,
+						this.btn_fourthwalls});
 			this.men_view.Name = "men_view";
 			this.men_view.Size = new System.Drawing.Size(44, 20);
 			this.men_view.Text = "View";
@@ -126,8 +121,8 @@
 			this.btn_alphatest.Size = new System.Drawing.Size(200, 22);
 			this.btn_alphatest.Text = "Alpha Test";
 			this.btn_alphatest.ToolTipText = "If checked, textures with alpha will be rendered using AlphaTest; otherwise, they" +
-    " will be rendered with Blend.";
-			this.btn_alphatest.CheckedChanged += new System.EventHandler(this.btn_alphatest_CheckedChanged);
+		" will be rendered with Blend.";
+			this.btn_alphatest.CheckedChanged += new System.EventHandler(this.evClickAlphaTest);
 			// 
 			// btn_bbox
 			// 
@@ -137,8 +132,8 @@
 			this.btn_bbox.Size = new System.Drawing.Size(200, 22);
 			this.btn_bbox.Text = "Bounding Boxes";
 			this.btn_bbox.ToolTipText = "If checked, the graph objects will be rendered  with their bounding boxes around " +
-    "them as yellow wireframes.";
-			this.btn_bbox.CheckedChanged += new System.EventHandler(this.btn_bbox_CheckedChanged);
+		"them as yellow wireframes.";
+			this.btn_bbox.CheckedChanged += new System.EventHandler(this.evClickBounds);
 			// 
 			// btn_grid
 			// 
@@ -150,7 +145,7 @@
 			this.btn_grid.Size = new System.Drawing.Size(200, 22);
 			this.btn_grid.Text = "Grid";
 			this.btn_grid.ToolTipText = "If checked, the XZ grid will be rendered.";
-			this.btn_grid.CheckedChanged += new System.EventHandler(this.btn_grid_CheckedChanged);
+			this.btn_grid.CheckedChanged += new System.EventHandler(this.evClickGrid);
 			// 
 			// btn_invertLook
 			// 
@@ -162,7 +157,7 @@
 			this.btn_invertLook.Size = new System.Drawing.Size(200, 22);
 			this.btn_invertLook.Text = "Invert Pitch";
 			this.btn_invertLook.ToolTipText = "If checked, the up arrow key will look down and the down arrow key will look up.";
-			this.btn_invertLook.Click += new System.EventHandler(this.btn_invertLook_Click);
+			this.btn_invertLook.Click += new System.EventHandler(this.evClickInvertLook);
 			// 
 			// btn_wireframe
 			// 
@@ -172,7 +167,7 @@
 			this.btn_wireframe.Size = new System.Drawing.Size(200, 22);
 			this.btn_wireframe.Text = "Wireframe";
 			this.btn_wireframe.ToolTipText = "If checked, only the outlines of the polygons will be rendered.";
-			this.btn_wireframe.CheckedChanged += new System.EventHandler(this.btn_wireframe_CheckedChanged);
+			this.btn_wireframe.CheckedChanged += new System.EventHandler(this.evClickWireframe);
 			// 
 			// toolStripSeparator1
 			// 
@@ -189,7 +184,7 @@
 			this.btn_ceilings.Size = new System.Drawing.Size(200, 22);
 			this.btn_ceilings.Text = "Ceilings";
 			this.btn_ceilings.ToolTipText = "If checked, graph objects with the ceiling flag will be rendered.";
-			this.btn_ceilings.CheckedChanged += new System.EventHandler(this.btn_ceilings_CheckedChanged);
+			this.btn_ceilings.CheckedChanged += new System.EventHandler(this.evClickCeilings);
 			// 
 			// btn_fourthwalls
 			// 
@@ -201,7 +196,7 @@
 			this.btn_fourthwalls.Size = new System.Drawing.Size(200, 22);
 			this.btn_fourthwalls.Text = "Fourth Walls";
 			this.btn_fourthwalls.ToolTipText = "If checked, graph objects with the fourth-wall flag will be rendered.";
-			this.btn_fourthwalls.CheckedChanged += new System.EventHandler(this.btn_fourthwalls_CheckedChanged);
+			this.btn_fourthwalls.CheckedChanged += new System.EventHandler(this.evClickFourthWalls);
 			// 
 			// btn_nbt
 			// 
@@ -211,8 +206,8 @@
 			this.btn_nbt.Size = new System.Drawing.Size(200, 22);
 			this.btn_nbt.Text = "NBT";
 			this.btn_nbt.ToolTipText = "If checked, normals (red), binormals (blue), and tangents (green) of each vertex " +
-    "will be rendered.";
-			this.btn_nbt.CheckedChanged += new System.EventHandler(this.btn_nbt_CheckedChanged);
+		"will be rendered.";
+			this.btn_nbt.CheckedChanged += new System.EventHandler(this.evClickNBT);
 			// 
 			// pan_controls
 			// 
@@ -232,15 +227,15 @@
 			this.tvw_models.Name = "tvw_models";
 			this.tvw_models.Size = new System.Drawing.Size(240, 455);
 			this.tvw_models.TabIndex = 4;
-			this.tvw_models.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tvw_models_AfterCheck);
-			this.tvw_models.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvw_models_AfterSelect);
+			this.tvw_models.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.evToggleVisible);
+			this.tvw_models.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.evSelectModel);
 			// 
 			// str_main
 			// 
 			this.str_main.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.str_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_import,
-            this.btn_unload});
+						this.btn_import,
+						this.btn_unload});
 			this.str_main.Location = new System.Drawing.Point(0, 0);
 			this.str_main.Name = "str_main";
 			this.str_main.Size = new System.Drawing.Size(240, 25);
@@ -255,7 +250,7 @@
 			this.btn_import.Size = new System.Drawing.Size(37, 22);
 			this.btn_import.Text = "Load";
 			this.btn_import.ToolTipText = "Load a BIN model";
-			this.btn_import.Click += new System.EventHandler(this.btn_import_Click);
+			this.btn_import.Click += new System.EventHandler(this.evClickImport);
 			// 
 			// btn_unload
 			// 
@@ -266,7 +261,7 @@
 			this.btn_unload.Size = new System.Drawing.Size(49, 22);
 			this.btn_unload.Text = "Unload";
 			this.btn_unload.ToolTipText = "Unload the select BIN model";
-			this.btn_unload.Click += new System.EventHandler(this.btn_unload_Click);
+			this.btn_unload.Click += new System.EventHandler(this.evClickUnload);
 			// 
 			// toolStripSeparator2
 			// 
