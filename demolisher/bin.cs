@@ -262,7 +262,6 @@ namespace arookas {
 			var obj = new demoObject(mReader);
 			mReader.PopAnchor();
 			mReader.Back();
-			mReader.Back();
 			return obj;
 		}
 		demoObject[] fetchGraphObjects(int index) {
