@@ -660,27 +660,39 @@ namespace arookas {
 	}
 
 	class demoBatch : IEnumerable<demoPrimitive> {
-		demoPrimitive[] primitives;
-		byte positions;
+		demoPrimitive[] mPrimitives;
+		demoBatchAttributes mAttr;
+		int mFaces;
+		uint mOffset;
+		bool mUseNBT;
+		bool mUseNormals;
+		byte mPositions;
 
-		public demoBatchAttributes Attributes { get; private set; }
-		public int FaceCount { get; private set; }
-		public uint Offset { get; private set; }
+		public demoBatchAttributes Attributes {
+			get { return mAttr; }
+		}
+		public int FaceCount {
+			get { return mFaces; }
+		}
+		public uint Offset {
+			get { return mOffset; }
+		}
 		public bool UseNBT { get; private set; }
 		public bool UseNormals { get; private set; }
 
-		public demoPrimitive this[int index] { get { return primitives[index]; } }
+		public demoPrimitive this[int index] {
+			get { return mPrimitives[index]; }
+		}
 
 		public demoBatch(aBinaryReader reader) {
-			FaceCount = reader.Read16();
-			int size = (reader.Read16() << 5);
-
-			Attributes = (demoBatchAttributes)(uint)reader.Read32();
-			UseNormals = (reader.Read8() != 0);
-			positions = reader.Read8();
-			int uvCount = reader.Read8();
-			UseNBT = (reader.Read8() != 0);
-			Offset = reader.Read32();
+			mFaces = reader.Read16();
+			var size = (reader.Read16() << 5);
+			mAttr = (demoBatchAttributes)(uint)reader.Read32();
+			mUseNormals = (reader.Read8() != 0);
+			mPositions = reader.Read8();
+			var uvs = reader.Read8();
+			mUseNBT = (reader.Read8() != 0);
+			mOffset = reader.Read32();
 
 			if (reader.Read8s(8).Any(zero => zero != 0)) {
 #if AROOKAS_DEMOLISHER_CHECKPADDING
@@ -688,24 +700,18 @@ namespace arookas {
 #endif
 			}
 
-			int faces = 0;
-			List<demoPrimitive> primitives = new List<demoPrimitive>();
+			var faces = 0;
+			var primitives = new List<demoPrimitive>();
 			reader.Goto(Offset);
-
 			while (faces < FaceCount && reader.Position < Offset + size) {
-				demoPrimitive primitive = new demoPrimitive(reader, UseNBT, uvCount, Attributes);
-
+				var primitive = new demoPrimitive(reader, mUseNBT, uvs, mAttr);
 				if (!primitive.Type.IsDefined()) {
 					break;
 				}
-
 				primitives.Add(primitive);
 				faces += primitive.FaceCount;
 			}
-
-			reader.Back();
-
-			this.primitives = primitives.ToArray();
+			mPrimitives = primitives.ToArray();
 		}
 
 		public bool hasAttribute(demoBatchAttributes attr) {
@@ -713,7 +719,7 @@ namespace arookas {
 		}
 
 		public IEnumerator<demoPrimitive> GetEnumerator() {
-			return primitives.GetArrayEnumerator();
+			return mPrimitives.GetArrayEnumerator();
 		}
 		IEnumerator IEnumerable.GetEnumerator() {
 			return GetEnumerator();
