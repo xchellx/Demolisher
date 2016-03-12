@@ -314,7 +314,15 @@ namespace arookas {
 			mReader.Goto(TextureOffset);
 			mReader.PushAnchor();
 			mReader.Goto(itemSize * index);
-			var texture = new demoTexture(mReader);
+			var width = mReader.Read16();
+			var height = mReader.Read16();
+			var format = (demoTexFormat)mReader.Read8();
+			var unk1 = mReader.Read8();
+			if (mReader.Read16() != 0) {
+				// throw new Exception("Texture.unk4 != 0");
+			}
+			mReader.Goto(mReader.Read32());
+			var texture = demoTexture.loadTexture(width, height, format, mReader);
 			mReader.PopAnchor();
 			mReader.Back();
 			return texture;

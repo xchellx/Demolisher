@@ -32,20 +32,6 @@ namespace arookas {
 		static int[] s4BitLUT;
 
 		demoTexture() { }
-		public demoTexture(aBinaryReader reader) {
-			mWidth = reader.Read16();
-			mHeight = reader.Read16();
-			mFormat = (demoTexFormat)reader.Read8();
-			reader.Read8(); // unk1
-			if (reader.Read16() != 0) {
-				throw new Exception("Texture.unk4 != 0");
-			}
-			var offset = reader.Read32();
-			mData = new aRGBA[Width * Height];
-			reader.Goto(offset);
-
-			reader.Back();
-		}
 
 		public demoTexture createInverse() {
 			var tex = new demoTexture();
