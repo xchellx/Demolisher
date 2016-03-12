@@ -123,14 +123,14 @@ namespace arookas {
 			mOffsets = mReader.Read32s(21);
 
 			mGraph = (HasGraph ? fetchGraphObjects(0) : new demoObject[0]);
-			mBatch = loadSection(GetBatchCount(), fetchBatch);
-			mShader = loadSection(GetShaderCount(), fetchShader);
-			mMaterial = loadSection(GetMaterialCount(), fetchMaterial);
-			mTexture = loadSection(GetTextureCount(), fetchTexture);
-			mPos = loadSection(GetPositionCount(), fetchPosition);
-			mNormal = loadSection(GetNormalCount(), fetchNormal);
-			mCoord0 = loadSection(GetCoord0Count(), fetchCoord0);
-			mCoord1 = loadSection(GetCoord1Count(), fetchCoord1);
+			mBatch = loadSection(calcBatchCount(), fetchBatch);
+			mShader = loadSection(calcShaderCount(), fetchShader);
+			mMaterial = loadSection(calcMaterialCount(), fetchMaterial);
+			mTexture = loadSection(calcTextureCount(), fetchTexture);
+			mPos = loadSection(calcPositionCount(), fetchPosition);
+			mNormal = loadSection(calcNormalCount(), fetchNormal);
+			mCoord0 = loadSection(calcCoord0Count(), fetchCoord0);
+			mCoord1 = loadSection(calcCoord1Count(), fetchCoord1);
 
 			mId = mTexture.Select(texture => texture.toGL()).ToArray();
 
@@ -143,121 +143,103 @@ namespace arookas {
 			return aCollection.Initialize(count, i => loadfunc(i));
 		}
 
-		int GetBatchCount() {
-			short batchCount = -1;
-
-			foreach (var graphObject in mGraph) {
-				foreach (var part in graphObject) {
-					if (part.Batch > batchCount) {
-						batchCount = part.Batch;
+		int calcBatchCount() {
+			var batch = -1;
+			foreach (var obj in mGraph) {
+				foreach (var part in obj) {
+					if (part.Batch > batch) {
+						batch = part.Batch;
 					}
 				}
 			}
-
-			return (batchCount + 1);
+			return (batch + 1);
 		}
-		int GetMaterialCount() {
-			short materialCount = -1;
-
+		int calcMaterialCount() {
+			var material = -1;
 			foreach (var shader in mShader) {
-				if (shader.Material.Max() > materialCount) {
-					materialCount = shader.Material.Max();
+				if (shader.Material.Max() > material) {
+					material = shader.Material.Max();
 				}
 			}
-
-			return (materialCount + 1);
+			return (material + 1);
 		}
-		int GetNormalCount() {
-			int normalCount = -1;
-
+		int calcNormalCount() {
+			var normal = -1;
 			foreach (var batch in mBatch) {
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive.Where(vertex => vertex.NormalIndex != null)) {
-						if (vertex.NormalIndex > normalCount) {
-							normalCount = vertex.NormalIndex.Value;
+						if (vertex.NormalIndex > normal) {
+							normal = vertex.NormalIndex.Value;
 						}
-
 						if (vertex.BinormalIndex != null) {
-							if (vertex.BinormalIndex + 1 > normalCount) {
-								normalCount = vertex.BinormalIndex.Value + 1;
+							if (vertex.BinormalIndex + 1 > normal) {
+								normal = vertex.BinormalIndex.Value + 1;
 							}
 						}
-
 						if (vertex.TangentIndex != null) {
-							if (vertex.TangentIndex + 2 > normalCount) {
-								normalCount = vertex.TangentIndex.Value + 2;
+							if (vertex.TangentIndex + 2 > normal) {
+								normal = vertex.TangentIndex.Value + 2;
 							}
 						}
 					}
 				}
 			}
-
-			return (normalCount + 1);
+			return (normal + 1);
 		}
-		int GetPositionCount() {
-			short positionCount = -1;
-
+		int calcPositionCount() {
+			var pos = -1;
 			foreach (var batch in mBatch) {
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive.Where(vertex => vertex.PositionIndex != null)) {
-						if (vertex.PositionIndex > positionCount) {
-							positionCount = vertex.PositionIndex.Value;
+						if (vertex.PositionIndex > pos) {
+							pos = vertex.PositionIndex.Value;
 						}
 					}
 				}
 			}
-
-			return (positionCount + 1);
+			return (pos + 1);
 		}
-		int GetShaderCount() {
-			short shaderCount = -1;
-
-			foreach (var graphObject in mGraph) {
-				foreach (var part in graphObject) {
-					if (part.Shader > shaderCount) {
-						shaderCount = part.Shader;
+		int calcShaderCount() {
+			var shader = -1;
+			foreach (var obj in mGraph) {
+				foreach (var part in obj) {
+					if (part.Shader > shader) {
+						shader = part.Shader;
 					}
 				}
 			}
-
-			return (shaderCount + 1);
+			return (shader + 1);
 		}
-		int GetTextureCount() {
-			short textureCount = 0;
-
+		int calcTextureCount() {
+			var tex = 0;
 			foreach (var material in mMaterial) {
-				if (material.mTex > textureCount) {
-					textureCount = material.mTex;
+				if (material.mTex > tex) {
+					tex = material.mTex;
 				}
 			}
-
-			return (textureCount + 1);
+			return (tex + 1);
 		}
-		int GetCoord0Count() {
-			short texCoord0Count = -1;
-
+		int calcCoord0Count() {
+			var coord0 = -1;
 			foreach (var batch in mBatch) {
 				foreach (var primitive in batch) {
-					foreach (var vertex in primitive.Where(vertex => vertex.UVIndex[0] != null && vertex.UVIndex[0] > texCoord0Count)) {
-						texCoord0Count = vertex.UVIndex[0].Value;
+					foreach (var vertex in primitive.Where(vertex => vertex.UVIndex[0] != null && vertex.UVIndex[0] > coord0)) {
+						coord0 = vertex.UVIndex[0].Value;
 					}
 				}
 			}
-
-			return (texCoord0Count + 1);
+			return (coord0 + 1);
 		}
-		int GetCoord1Count() {
-			short texCoord1Count = -1;
-
+		int calcCoord1Count() {
+			var coord1 = -1;
 			foreach (var batch in mBatch) {
 				foreach (var primitive in batch) {
-					foreach (var vertex in primitive.Where(vertex => vertex.UVIndex[1] != null && vertex.UVIndex[1] > texCoord1Count)) {
-						texCoord1Count = vertex.UVIndex[1].Value;
+					foreach (var vertex in primitive.Where(vertex => vertex.UVIndex[1] != null && vertex.UVIndex[1] > coord1)) {
+						coord1 = vertex.UVIndex[1].Value;
 					}
 				}
 			}
-
-			return (texCoord1Count + 1);
+			return (coord1 + 1);
 		}
 
 		demoBatch fetchBatch(int index) {
@@ -391,7 +373,7 @@ namespace arookas {
 			}
 			foreach (var part in obj) {
 				if (mShader[part.Shader].Tint.a > 0 && ((mShader[part.Shader].Tint.a == aRGBA.cOpaque && flags.HasFlag(demoRenderFlags.OPAQUE)) || (mShader[part.Shader].Tint.a < aRGBA.cOpaque && flags.HasFlag(demoRenderFlags.TRANSLUCENT)))) {
-					RenderPart(part, flags);
+					renderPart(part, flags);
 				}
 			}
 			GL.Enable(EnableCap.Lighting);
@@ -400,7 +382,7 @@ namespace arookas {
 			}
 			GL.PopMatrix();
 		}
-		void RenderPart(demoPart part, demoRenderFlags renderFlags) {
+		void renderPart(demoPart part, demoRenderFlags renderFlags) {
 			GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, gl.convert(mShader[part.Shader].Tint));
 			var batch = mBatch[part.Batch];
 
