@@ -30,16 +30,17 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.TableLayoutPanel tblMain;
-			System.Windows.Forms.GroupBox grpHierarchy;
 			System.Windows.Forms.TableLayoutPanel tblHierarchy;
-			System.Windows.Forms.GroupBox grpFlags;
+			System.Windows.Forms.Label lblNext;
+			System.Windows.Forms.Label lblChild;
+			System.Windows.Forms.Label lblIndex;
 			System.Windows.Forms.TableLayoutPanel tblFlags;
+			System.Windows.Forms.Label label1;
+			this.grpHierarchy = new System.Windows.Forms.GroupBox();
 			this.lblNextNum = new System.Windows.Forms.Label();
-			this.lblNext = new System.Windows.Forms.Label();
 			this.lblChildNum = new System.Windows.Forms.Label();
-			this.lblChild = new System.Windows.Forms.Label();
 			this.lblIndexNum = new System.Windows.Forms.Label();
-			this.lblIndex = new System.Windows.Forms.Label();
+			this.grpFlags = new System.Windows.Forms.GroupBox();
 			this.chkFlag1 = new System.Windows.Forms.CheckBox();
 			this.chkFlag5 = new System.Windows.Forms.CheckBox();
 			this.chkFlag6 = new System.Windows.Forms.CheckBox();
@@ -49,15 +50,18 @@
 			this.chkFlag3 = new System.Windows.Forms.CheckBox();
 			this.chkFlag4 = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.lblPrevNum = new System.Windows.Forms.Label();
 			tblMain = new System.Windows.Forms.TableLayoutPanel();
-			grpHierarchy = new System.Windows.Forms.GroupBox();
 			tblHierarchy = new System.Windows.Forms.TableLayoutPanel();
-			grpFlags = new System.Windows.Forms.GroupBox();
+			lblNext = new System.Windows.Forms.Label();
+			lblChild = new System.Windows.Forms.Label();
+			lblIndex = new System.Windows.Forms.Label();
 			tblFlags = new System.Windows.Forms.TableLayoutPanel();
+			label1 = new System.Windows.Forms.Label();
 			tblMain.SuspendLayout();
-			grpHierarchy.SuspendLayout();
+			this.grpHierarchy.SuspendLayout();
 			tblHierarchy.SuspendLayout();
-			grpFlags.SuspendLayout();
+			this.grpFlags.SuspendLayout();
 			tblFlags.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -65,13 +69,13 @@
 			// 
 			tblMain.ColumnCount = 1;
 			tblMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			tblMain.Controls.Add(grpHierarchy, 0, 0);
-			tblMain.Controls.Add(grpFlags, 0, 1);
+			tblMain.Controls.Add(this.grpHierarchy, 0, 0);
+			tblMain.Controls.Add(this.grpFlags, 0, 1);
 			tblMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			tblMain.Location = new System.Drawing.Point(0, 0);
 			tblMain.Name = "tblMain";
 			tblMain.RowCount = 3;
-			tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+			tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
 			tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140F));
 			tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			tblMain.Size = new System.Drawing.Size(205, 303);
@@ -79,36 +83,39 @@
 			// 
 			// grpHierarchy
 			// 
-			grpHierarchy.Controls.Add(tblHierarchy);
-			grpHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
-			grpHierarchy.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			grpHierarchy.Location = new System.Drawing.Point(3, 3);
-			grpHierarchy.Name = "grpHierarchy";
-			grpHierarchy.Size = new System.Drawing.Size(199, 64);
-			grpHierarchy.TabIndex = 0;
-			grpHierarchy.TabStop = false;
-			grpHierarchy.Text = "Hierarchy";
+			this.grpHierarchy.Controls.Add(tblHierarchy);
+			this.grpHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpHierarchy.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.grpHierarchy.Location = new System.Drawing.Point(3, 3);
+			this.grpHierarchy.Name = "grpHierarchy";
+			this.grpHierarchy.Size = new System.Drawing.Size(199, 84);
+			this.grpHierarchy.TabIndex = 0;
+			this.grpHierarchy.TabStop = false;
+			this.grpHierarchy.Text = "Hierarchy";
 			// 
 			// tblHierarchy
 			// 
 			tblHierarchy.ColumnCount = 2;
 			tblHierarchy.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			tblHierarchy.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			tblHierarchy.Controls.Add(this.lblPrevNum, 1, 3);
 			tblHierarchy.Controls.Add(this.lblNextNum, 1, 2);
-			tblHierarchy.Controls.Add(this.lblNext, 0, 2);
+			tblHierarchy.Controls.Add(lblNext, 0, 2);
 			tblHierarchy.Controls.Add(this.lblChildNum, 1, 1);
-			tblHierarchy.Controls.Add(this.lblChild, 0, 1);
+			tblHierarchy.Controls.Add(lblChild, 0, 1);
 			tblHierarchy.Controls.Add(this.lblIndexNum, 1, 0);
-			tblHierarchy.Controls.Add(this.lblIndex, 0, 0);
+			tblHierarchy.Controls.Add(lblIndex, 0, 0);
+			tblHierarchy.Controls.Add(label1, 0, 3);
 			tblHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
 			tblHierarchy.Location = new System.Drawing.Point(3, 18);
 			tblHierarchy.Name = "tblHierarchy";
-			tblHierarchy.RowCount = 4;
+			tblHierarchy.RowCount = 5;
 			tblHierarchy.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			tblHierarchy.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			tblHierarchy.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			tblHierarchy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			tblHierarchy.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			tblHierarchy.Size = new System.Drawing.Size(193, 43);
+			tblHierarchy.Size = new System.Drawing.Size(193, 63);
 			tblHierarchy.TabIndex = 0;
 			// 
 			// lblNextNum
@@ -123,13 +130,14 @@
 			// 
 			// lblNext
 			// 
-			this.lblNext.AutoSize = true;
-			this.lblNext.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lblNext.Location = new System.Drawing.Point(3, 26);
-			this.lblNext.Name = "lblNext";
-			this.lblNext.Size = new System.Drawing.Size(90, 13);
-			this.lblNext.TabIndex = 4;
-			this.lblNext.Text = "Next";
+			lblNext.AutoSize = true;
+			lblNext.Dock = System.Windows.Forms.DockStyle.Fill;
+			lblNext.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			lblNext.Location = new System.Drawing.Point(3, 26);
+			lblNext.Name = "lblNext";
+			lblNext.Size = new System.Drawing.Size(90, 13);
+			lblNext.TabIndex = 4;
+			lblNext.Text = "Next";
 			// 
 			// lblChildNum
 			// 
@@ -143,13 +151,14 @@
 			// 
 			// lblChild
 			// 
-			this.lblChild.AutoSize = true;
-			this.lblChild.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lblChild.Location = new System.Drawing.Point(3, 13);
-			this.lblChild.Name = "lblChild";
-			this.lblChild.Size = new System.Drawing.Size(90, 13);
-			this.lblChild.TabIndex = 2;
-			this.lblChild.Text = "Child";
+			lblChild.AutoSize = true;
+			lblChild.Dock = System.Windows.Forms.DockStyle.Fill;
+			lblChild.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			lblChild.Location = new System.Drawing.Point(3, 13);
+			lblChild.Name = "lblChild";
+			lblChild.Size = new System.Drawing.Size(90, 13);
+			lblChild.TabIndex = 2;
+			lblChild.Text = "Child";
 			// 
 			// lblIndexNum
 			// 
@@ -163,24 +172,25 @@
 			// 
 			// lblIndex
 			// 
-			this.lblIndex.AutoSize = true;
-			this.lblIndex.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lblIndex.Location = new System.Drawing.Point(3, 0);
-			this.lblIndex.Name = "lblIndex";
-			this.lblIndex.Size = new System.Drawing.Size(90, 13);
-			this.lblIndex.TabIndex = 0;
-			this.lblIndex.Text = "Index";
+			lblIndex.AutoSize = true;
+			lblIndex.Dock = System.Windows.Forms.DockStyle.Fill;
+			lblIndex.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			lblIndex.Location = new System.Drawing.Point(3, 0);
+			lblIndex.Name = "lblIndex";
+			lblIndex.Size = new System.Drawing.Size(90, 13);
+			lblIndex.TabIndex = 0;
+			lblIndex.Text = "Parent";
 			// 
 			// grpFlags
 			// 
-			grpFlags.Controls.Add(tblFlags);
-			grpFlags.Dock = System.Windows.Forms.DockStyle.Fill;
-			grpFlags.Location = new System.Drawing.Point(3, 73);
-			grpFlags.Name = "grpFlags";
-			grpFlags.Size = new System.Drawing.Size(199, 134);
-			grpFlags.TabIndex = 1;
-			grpFlags.TabStop = false;
-			grpFlags.Text = "Flags";
+			this.grpFlags.Controls.Add(tblFlags);
+			this.grpFlags.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpFlags.Location = new System.Drawing.Point(3, 93);
+			this.grpFlags.Name = "grpFlags";
+			this.grpFlags.Size = new System.Drawing.Size(199, 134);
+			this.grpFlags.TabIndex = 1;
+			this.grpFlags.TabStop = false;
+			this.grpFlags.Text = "Flags";
 			// 
 			// tblFlags
 			// 
@@ -296,6 +306,27 @@
 			this.chkFlag4.Text = "Translucent";
 			this.chkFlag4.UseVisualStyleBackColor = true;
 			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			label1.Location = new System.Drawing.Point(3, 39);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(90, 20);
+			label1.TabIndex = 6;
+			label1.Text = "Prev";
+			// 
+			// lblPrevNum
+			// 
+			this.lblPrevNum.AutoSize = true;
+			this.lblPrevNum.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblPrevNum.Location = new System.Drawing.Point(99, 39);
+			this.lblPrevNum.Name = "lblPrevNum";
+			this.lblPrevNum.Size = new System.Drawing.Size(91, 20);
+			this.lblPrevNum.TabIndex = 7;
+			this.lblPrevNum.Text = "#999";
+			// 
 			// demoObjectPropsControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,10 +336,10 @@
 			this.Name = "demoObjectPropsControl";
 			this.Size = new System.Drawing.Size(205, 303);
 			tblMain.ResumeLayout(false);
-			grpHierarchy.ResumeLayout(false);
+			this.grpHierarchy.ResumeLayout(false);
 			tblHierarchy.ResumeLayout(false);
 			tblHierarchy.PerformLayout();
-			grpFlags.ResumeLayout(false);
+			this.grpFlags.ResumeLayout(false);
 			tblFlags.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -316,11 +347,8 @@
 
 		#endregion
 
-		private System.Windows.Forms.Label lblIndex;
 		private System.Windows.Forms.Label lblNextNum;
-		private System.Windows.Forms.Label lblNext;
 		private System.Windows.Forms.Label lblChildNum;
-		private System.Windows.Forms.Label lblChild;
 		private System.Windows.Forms.Label lblIndexNum;
 		private System.Windows.Forms.CheckBox chkFlag1;
 		private System.Windows.Forms.CheckBox chkFlag5;
@@ -331,5 +359,8 @@
 		private System.Windows.Forms.CheckBox chkFlag3;
 		private System.Windows.Forms.CheckBox chkFlag4;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.GroupBox grpHierarchy;
+		private System.Windows.Forms.GroupBox grpFlags;
+		private System.Windows.Forms.Label lblPrevNum;
 	}
 }
