@@ -233,37 +233,11 @@ namespace arookas {
 			GL.End();
 		}
 
-		public static void setTexture2DWrapModeS(demoWrapMode mode) {
-			switch (mode) {
-				case demoWrapMode.Clamp: {
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-					break;
-				}
-				case demoWrapMode.Repeat: {
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-					break;
-				}
-				case demoWrapMode.Mirror: {
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.MirroredRepeat);
-					break;
-				}
-			}
+		public static void setWrapModeS(demoWrapMode mode) {
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)convert(mode));
 		}
-		public static void setTexture2DWrapModeT(demoWrapMode mode) {
-			switch (mode) {
-				case demoWrapMode.Clamp: {
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-					break;
-				}
-				case demoWrapMode.Repeat: {
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-					break;
-				}
-				case demoWrapMode.Mirror: {
-					GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.MirroredRepeat);
-					break;
-				}
-			}
+		public static void setWrapModeT(demoWrapMode mode) {
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)convert(mode));
 		}
 
 		public static void setTexture2D(int unit, int tex) {
@@ -273,8 +247,8 @@ namespace arookas {
 		}
 		public static void setTexture2D(int unit, int tex, demoWrapMode wrapS, demoWrapMode wrapT) {
 			setTexture2D(unit, tex);
-			setTexture2DWrapModeS(wrapS);
-			setTexture2DWrapModeT(wrapT);
+			setWrapModeS(wrapS);
+			setWrapModeT(wrapT);
 		}
 
 		public static Vector3 TransformPoint(this Matrix4 matrix, Vector3 point) {
@@ -304,6 +278,23 @@ namespace arookas {
 		}
 		public static Color4 convert(this aRGBA color) {
 			return new Color4(color.r, color.g, color.b, color.a);
+		}
+
+		public static demoWrapMode convert(TextureWrapMode mode) {
+			switch (mode) {
+				case TextureWrapMode.ClampToEdge: return demoWrapMode.Clamp;
+				case TextureWrapMode.Repeat: return demoWrapMode.Repeat;
+				case TextureWrapMode.MirroredRepeat: return demoWrapMode.Mirror;
+			}
+			throw new Exception("Unknown wrap mode.");
+		}
+		public static TextureWrapMode convert(demoWrapMode mode) {
+			switch (mode) {
+				case demoWrapMode.Clamp: return TextureWrapMode.ClampToEdge;
+				case demoWrapMode.Repeat: return TextureWrapMode.Repeat;
+				case demoWrapMode.Mirror: return TextureWrapMode.MirroredRepeat;
+			}
+			throw new Exception("Unknown wrap mode.");
 		}
 	}
 }

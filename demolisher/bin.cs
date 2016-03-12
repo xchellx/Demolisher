@@ -398,15 +398,15 @@ namespace arookas {
 				GL.ActiveTexture(TextureUnit.Texture0 + 0);
 				GL.Enable(EnableCap.Texture2D);
 				GL.BindTexture(TextureTarget.Texture2D, mId[mMaterial[mShader[part.Shader].Material[0]].mTex]);
-				gl.setTexture2DWrapModeS(mMaterial[mShader[part.Shader].Material[0]].mWrapS);
-				gl.setTexture2DWrapModeT(mMaterial[mShader[part.Shader].Material[0]].mWrapT);
+				gl.setWrapModeS(mMaterial[mShader[part.Shader].Material[0]].mWrapS);
+				gl.setWrapModeT(mMaterial[mShader[part.Shader].Material[0]].mWrapT);
 				GL.Uniform1(diffuseMap, 0);
 
 				GL.ActiveTexture(TextureUnit.Texture0 + 1);
 				GL.Enable(EnableCap.Texture2D);
 				GL.BindTexture(TextureTarget.Texture2D, mId[mMaterial[mShader[part.Shader].Material[1]].mTex]);
-				gl.setTexture2DWrapModeS(mMaterial[mShader[part.Shader].Material[1]].mWrapS);
-				gl.setTexture2DWrapModeT(mMaterial[mShader[part.Shader].Material[1]].mWrapT);
+				gl.setWrapModeS(mMaterial[mShader[part.Shader].Material[1]].mWrapS);
+				gl.setWrapModeT(mMaterial[mShader[part.Shader].Material[1]].mWrapT);
 				GL.Uniform1(bumpMap, 1);
 
 				GL.Uniform1(embossFactor, 2.0f);
@@ -438,8 +438,8 @@ namespace arookas {
 					GL.ActiveTexture(TextureUnit.Texture0 + texUnit);
 					GL.Enable(EnableCap.Texture2D);
 					GL.BindTexture(TextureTarget.Texture2D, mId[material.mTex]);
-					gl.setTexture2DWrapModeS(material.mWrapS);
-					gl.setTexture2DWrapModeT(material.mWrapT);
+					gl.setWrapModeS(material.mWrapS);
+					gl.setWrapModeT(material.mWrapT);
 				}
 
 				foreach (var primitive in batch) {
