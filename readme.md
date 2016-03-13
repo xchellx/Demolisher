@@ -1,4 +1,4 @@
-﻿# Demolisher v0.3.1
+﻿# Demolisher
 
 ## Summary
 
@@ -8,7 +8,7 @@ Do **not** expect the program to be able to export or convert these models into 
 
 This program makes use of [OpenTK](http://www.opentk.com) for rendering and input.
 
-## Use
+## Usage
 
 ### Controls
 
@@ -37,6 +37,18 @@ _Demolisher_ also supports the following:
 - Wireframe view
 - Unit grid (X/Z axis)
 - Texture alpha (cut-off and blend)
-- Emboss-mapped surfaces ([emboss.fp](https://github.com/arookas/Demolisher/blob/master/Shaders/emboss.fp) and [emboss.vp](https://github.com/arookas/Demolisher/blob/master/Shaders/emboss.vp))
+- Emboss-mapped surfaces ([emboss.fp](shaders/emboss.fp) and [emboss.vp](shaders/emboss.vp))
 
 _Demolisher_ supports _only_ BIN models — BDL and BMD are not supported; however, you may open and view any number of BIN model files at a single time.
+
+## Compilation
+
+To compile _Demolisher_, you'll need to have the following libraries compiled and/or installed:
+
+- [arookas library](http://github.com/arookas/arookas)
+- [OpenTK](http://www.opentk.com)
+
+The repository contains a [premake5](https://premake.github.io/) [script](premake5.lua).
+Simply run the script with premake5 and build the resulting solution.
+
+> You might need to fill in any unresolved-reference errors by supplying your IDE with the paths to the depencies listed above.
