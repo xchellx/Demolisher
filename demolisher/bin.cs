@@ -524,7 +524,7 @@ namespace arookas {
 
 		public bool Visible {
 			get { return mVisible; }
-			set { mVisible = true; }
+			set { mVisible = value; }
 		}
 
 		public int PartCount {
