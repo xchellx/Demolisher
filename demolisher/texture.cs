@@ -75,6 +75,8 @@ namespace arookas {
 			var tex = new demoTexture();
 			tex.mWidth = width;
 			tex.mHeight = height;
+			tex.mFormat = format;
+			tex.mData = new aRGBA[width * height];
 			switch (format) {
 				case demoTexFormat.I4: loadTextureI4(tex, reader); break;
 				case demoTexFormat.I8: loadTextureI8(tex, reader); break;
