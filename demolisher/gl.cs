@@ -237,7 +237,7 @@ namespace arookas {
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)convert(mode));
 		}
 		public static void setWrapModeT(demoWrapMode mode) {
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)convert(mode));
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)convert(mode));
 		}
 
 		public static void setTexture2D(int unit, int tex) {
