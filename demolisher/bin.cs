@@ -542,9 +542,7 @@ namespace arookas {
 			mPrev = reader.ReadS16();
 
 			if (reader.Read8() != 0) {
-#if AROOKAS_DEMOLISHER_CHECKPADDING
-				throw new Exception(String.Format("GraphObject padding != 0 at 0x{0:X8}.", reader.Stream.Position));
-#endif
+				throw new Exception("object padding != 0 (before flags)");
 			}
 
 			mFlags = (demoObjectFlags)reader.Read8();
