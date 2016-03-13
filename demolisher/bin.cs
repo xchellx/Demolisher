@@ -220,17 +220,17 @@ namespace arookas {
 			mReader.Goto(BatchOffset);
 			mReader.PushAnchor();
 			mReader.Goto(cItemSize * index);
-			demoBatch batch = new demoBatch(mReader);
+			var batch = new demoBatch(mReader);
 			mReader.PopAnchor();
 			mReader.Back();
 			return batch;
 		}
 		demoObject fetchObject(int index) {
-			const int itemSize = 0x8C;
+			const int cItemSize = 0x8C;
 			mReader.Keep();
 			mReader.Goto(GraphOffset);
 			mReader.PushAnchor();
-			mReader.Goto(itemSize * index);
+			mReader.Goto(cItemSize * index);
 			var obj = new demoObject(mReader);
 			mReader.PopAnchor();
 			mReader.Back();
@@ -260,32 +260,32 @@ namespace arookas {
 			const int cItemSize = 0xC;
 			mReader.Keep();
 			mReader.Goto(NormalOffset + cItemSize * index);
-			Vector3 normal = new Vector3(mReader.ReadF32(), mReader.ReadF32(), mReader.ReadF32());
+			var normal = new Vector3(mReader.ReadF32(), mReader.ReadF32(), mReader.ReadF32());
 			mReader.Back();
 			return normal;
 		}
 		Vector3 fetchPosition(int index) {
-			const int itemSize = 0x6;
+			const int cItemSize = 0x6;
 			mReader.Keep();
-			mReader.Goto(PositionOffset + itemSize * index);
-			Vector3 pos = new Vector3(mReader.ReadS16() / cGlobalScale, mReader.ReadS16() / cGlobalScale, mReader.ReadS16() / cGlobalScale);
+			mReader.Goto(PositionOffset + cItemSize * index);
+			var pos = new Vector3(mReader.ReadS16() / cGlobalScale, mReader.ReadS16() / cGlobalScale, mReader.ReadS16() / cGlobalScale);
 			mReader.Back();
 			return pos;
 		}
 		demoShader fetchShader(int index) {
-			const int itemSize = 0x28;
+			const int cItemSize = 0x28;
 			mReader.Keep();
-			mReader.Goto(ShaderOffset + itemSize * index);
-			demoShader shader = new demoShader(mReader);
+			mReader.Goto(ShaderOffset + cItemSize * index);
+			var shader = new demoShader(mReader);
 			mReader.Back();
 			return shader;
 		}
 		demoTexture fetchTexture(int index) {
-			const int itemSize = 0xC;
+			const int cItemSize = 0xC;
 			mReader.Keep();
 			mReader.Goto(TextureOffset);
 			mReader.PushAnchor();
-			mReader.Goto(itemSize * index);
+			mReader.Goto(cItemSize * index);
 			var width = mReader.Read16();
 			var height = mReader.Read16();
 			var format = (demoTexFormat)mReader.Read8();
@@ -303,7 +303,7 @@ namespace arookas {
 			const int cItemSize = 0x8;
 			mReader.Keep();
 			mReader.Goto(Coord0Offset + cItemSize * index);
-			Vector2 texCoord = new Vector2(mReader.ReadF32(), mReader.ReadF32());
+			var texCoord = new Vector2(mReader.ReadF32(), mReader.ReadF32());
 			mReader.Back();
 			return texCoord;
 		}
@@ -311,7 +311,7 @@ namespace arookas {
 			const int cItemSize = 0x8;
 			mReader.Keep();
 			mReader.Goto(Coord1Offset + cItemSize * index);
-			Vector2 texCoord = new Vector2(mReader.ReadF32(), mReader.ReadF32());
+			var texCoord = new Vector2(mReader.ReadF32(), mReader.ReadF32());
 			mReader.Back();
 			return texCoord;
 		}
@@ -681,8 +681,8 @@ namespace arookas {
 
 			var faces = 0;
 			var primitives = new List<demoPrimitive>();
-			reader.Goto(Offset);
-			while (faces < FaceCount && reader.Position < Offset + size) {
+			reader.Goto(mOffset);
+			while (faces < mFaces && reader.Position < mOffset + size) {
 				var primitive = new demoPrimitive(reader, mUseNBT, uvs, mAttr);
 				if (!primitive.Type.IsDefined()) {
 					break;
@@ -694,7 +694,7 @@ namespace arookas {
 		}
 
 		public bool hasAttribute(demoBatchAttributes attr) {
-			return (Attributes & attr) != 0;
+			return (mAttr & attr) != 0;
 		}
 
 		public IEnumerator<demoPrimitive> GetEnumerator() {
