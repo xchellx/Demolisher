@@ -183,7 +183,7 @@ namespace arookas {
 			return (shader + 1);
 		}
 		int calcTextureCount() {
-			var tex = 0;
+			var tex = -1;
 			foreach (var material in mMaterials) {
 				if (material.mTex > tex) {
 					tex = material.mTex;
