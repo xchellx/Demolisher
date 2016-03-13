@@ -48,6 +48,7 @@ namespace arookas {
 		public demoObject setObject(demoObject obj) {
 			var old = mObject;
 			mObject = obj;
+			update();
 			return old;
 		}
 	}
