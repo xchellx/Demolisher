@@ -20,29 +20,36 @@ namespace arookas {
 				return;
 			}
 			setHidden(false);
-			updateIndexLabel(lblIndexNum, mObject.Parent);
-			updateIndexLabel(lblChildNum, mObject.Child);
-			updateIndexLabel(lblNextNum, mObject.Next);
-			updateIndexLabel(lblPrevNum, mObject.Prev);
+			updateIndexLabel(lblIndex, lblIndexNum, mObject.Parent);
+			updateIndexLabel(lblChild, lblChildNum, mObject.Child);
+			updateIndexLabel(lblNext, lblNextNum, mObject.Next);
+			updateIndexLabel(lblPrev, lblPrevNum, mObject.Prev);
 
-			chkFlag1.Checked = mObject.hasFlag(demoObjectFlags.UNK01);
-			chkFlag2.Checked = mObject.hasFlag(demoObjectFlags.UNK02);
-			chkFlag3.Checked = mObject.hasFlag(demoObjectFlags.FOURTHWALL);
-			chkFlag4.Checked = mObject.hasFlag(demoObjectFlags.TRANSPARENT);
-			chkFlag5.Checked = mObject.hasFlag(demoObjectFlags.UNK10);
-			chkFlag6.Checked = mObject.hasFlag(demoObjectFlags.UNK20);
-			chkFlag7.Checked = mObject.hasFlag(demoObjectFlags.FULLBRIGHT);
-			chkFlag8.Checked = mObject.hasFlag(demoObjectFlags.CEILING);
+			updateFlagLabel(chkFlag1, demoObjectFlags.UNK01);
+			updateFlagLabel(chkFlag2, demoObjectFlags.UNK02);
+			updateFlagLabel(chkFlag3, demoObjectFlags.FOURTHWALL);
+			updateFlagLabel(chkFlag4, demoObjectFlags.TRANSPARENT);
+			updateFlagLabel(chkFlag5, demoObjectFlags.UNK10);
+			updateFlagLabel(chkFlag6, demoObjectFlags.UNK20);
+			updateFlagLabel(chkFlag7, demoObjectFlags.FULLBRIGHT);
+			updateFlagLabel(chkFlag8, demoObjectFlags.CEILING);
 		}
-		void updateIndexLabel(Label label, int index) {
+		void updateIndexLabel(Label name, Label num, int index) {
 			if (index >= 0) {
-				label.Enabled = true;
-				label.Text = String.Format("#{0:D3}", index);
+				name.Enabled = true;
+				num.Enabled = true;
+				num.Text = String.Format("#{0:D3}", index);
 			}
 			else {
-				label.Enabled = false;
-				label.Text = "None";
+				name.Enabled = false;
+				num.Enabled = false;
+				num.Text = "None";
 			}
+		}
+		void updateFlagLabel(CheckBox check, demoObjectFlags flag) {
+			var on = mObject.hasFlag(flag);
+			check.Checked = on;
+			check.Enabled = on;
 		}
 
 		public demoObject setObject(demoObject obj) {

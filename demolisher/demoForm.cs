@@ -316,6 +316,23 @@ namespace arookas {
 			}
 			glFrame.Invalidate();
 		}
+		void evSelectObject(object sender, TreeViewEventArgs e) {
+			demoObject obj = null;
+			if (e.Node != null) {
+				var tag = e.Node.Tag;
+				if (tag is demoBinModel) {
+					obj = (tag as demoBinModel)[0];
+				}
+				else if (tag is demoObject) {
+					obj = tag as demoObject;
+				}
+			}
+			panObjectProps.setObject(obj);
+		}
+		void evUnfocusObjects(object sender, EventArgs e) {
+			tvwModels.SelectedNode = null;
+			panObjectProps.setObject(null);
+		}
 
 		void evGLDragDrop(object sender, DragEventArgs e) {
 			foreach (var model in (e.Data.GetData(DataFormats.FileDrop) as string[])) {
@@ -361,6 +378,7 @@ namespace arookas {
 			initViewport();
 			glFrame.Invalidate();
 		}
+
 	}
 
 	struct demoViewpoint {
