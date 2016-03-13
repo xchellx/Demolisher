@@ -27,7 +27,7 @@ namespace arookas {
 		Vector3[] mNormal;
 		Vector2[] mCoord0;
 		Vector2[] mCoord1;
-		int[] mId;
+		int[] mIds;
 
 		const float cGlobalScale = 256.0f;
 		const float cGlobalScaleReciprocal = (1.0f / cGlobalScale);
@@ -104,7 +104,7 @@ namespace arookas {
 			mCoord0 = loadSection(calcCoord0Count(), fetchCoord0);
 			mCoord1 = loadSection(calcCoord1Count(), fetchCoord1);
 
-			mId = mTexture.Select(texture => texture.toGL()).ToArray();
+			mIds = mTexture.Select(texture => texture.toGL()).ToArray();
 
 			Position = pos;
 			Rotation = rot;
@@ -260,7 +260,7 @@ namespace arookas {
 			const int cItemSize = 0xC;
 			mReader.Keep();
 			mReader.Goto(NormalOffset + cItemSize * index);
-			var normal = new Vector3(mReader.ReadF32(), mReader.ReadF32(), mReader.ReadF32());
+			var normal = mReader.readVec3();
 			mReader.Back();
 			return normal;
 		}
@@ -366,24 +366,24 @@ namespace arookas {
 			var batch = mBatch[part.Batch];
 
 			if (batch.UseNBT) { // bump map
-				int binormalAttribute = GL.GetAttribLocation(Program.sEmboss, "inBinormal");
-				int tangentAttribute = GL.GetAttribLocation(Program.sEmboss, "inTangent");
-				int diffuseMap = GL.GetUniformLocation(Program.sEmboss, "diffuseMap");
-				int bumpMap = GL.GetUniformLocation(Program.sEmboss, "bumpMap");
-				int embossFactor = GL.GetUniformLocation(Program.sEmboss, "embossScale");
+				var binormalAttribute = GL.GetAttribLocation(Program.sEmboss, "inBinormal");
+				var tangentAttribute = GL.GetAttribLocation(Program.sEmboss, "inTangent");
+				var diffuseMap = GL.GetUniformLocation(Program.sEmboss, "diffuseMap");
+				var bumpMap = GL.GetUniformLocation(Program.sEmboss, "bumpMap");
+				var embossFactor = GL.GetUniformLocation(Program.sEmboss, "embossScale");
 
 				Program.sEmboss.use();
 
 				GL.ActiveTexture(TextureUnit.Texture0 + 0);
 				GL.Enable(EnableCap.Texture2D);
-				GL.BindTexture(TextureTarget.Texture2D, mId[mMaterial[mShader[part.Shader].Material[0]].mTex]);
+				GL.BindTexture(TextureTarget.Texture2D, mIds[mMaterial[mShader[part.Shader].Material[0]].mTex]);
 				gl.setWrapModeS(mMaterial[mShader[part.Shader].Material[0]].mWrapS);
 				gl.setWrapModeT(mMaterial[mShader[part.Shader].Material[0]].mWrapT);
 				GL.Uniform1(diffuseMap, 0);
 
 				GL.ActiveTexture(TextureUnit.Texture0 + 1);
 				GL.Enable(EnableCap.Texture2D);
-				GL.BindTexture(TextureTarget.Texture2D, mId[mMaterial[mShader[part.Shader].Material[1]].mTex]);
+				GL.BindTexture(TextureTarget.Texture2D, mIds[mMaterial[mShader[part.Shader].Material[1]].mTex]);
 				gl.setWrapModeS(mMaterial[mShader[part.Shader].Material[1]].mWrapS);
 				gl.setWrapModeT(mMaterial[mShader[part.Shader].Material[1]].mWrapT);
 				GL.Uniform1(bumpMap, 1);
@@ -392,7 +392,6 @@ namespace arookas {
 
 				foreach (var primitive in batch) {
 					GL.Begin(primitive.GLType);
-
 					foreach (var vertex in primitive) {
 						GL.MultiTexCoord2(TextureUnit.Texture0 + 0, ref mCoord0[vertex.UVIndex[0].Value]);
 						GL.MultiTexCoord2(TextureUnit.Texture0 + 1, ref mCoord1[vertex.UVIndex[1].Value]);
@@ -401,10 +400,8 @@ namespace arookas {
 						GL.VertexAttrib3(binormalAttribute, ref mNormal[vertex.TangentIndex.Value + 2]);
 						GL.Vertex3(mPos[vertex.PositionIndex.Value]);
 					}
-
 					GL.End();
 				}
-
 				GL.UseProgram(0);
 			}
 			else {
@@ -412,30 +409,24 @@ namespace arookas {
 					if (mShader[part.Shader].Material[texUnit] < 0) {
 						continue;
 					}
-
 					var material = mMaterial[mShader[part.Shader].Material[texUnit]];
 					GL.ActiveTexture(TextureUnit.Texture0 + texUnit);
 					GL.Enable(EnableCap.Texture2D);
-					GL.BindTexture(TextureTarget.Texture2D, mId[material.mTex]);
+					GL.BindTexture(TextureTarget.Texture2D, mIds[material.mTex]);
 					gl.setWrapModeS(material.mWrapS);
 					gl.setWrapModeT(material.mWrapT);
 				}
-
 				foreach (var primitive in batch) {
 					GL.Begin(primitive.GLType);
-
 					foreach (var vertex in primitive) {
 						if (vertex.UVIndex[0] != null) {
 							GL.MultiTexCoord2(TextureUnit.Texture0, ref mCoord0[vertex.UVIndex[0].Value]);
 						}
-
 						if (vertex.NormalIndex != null) {
 							GL.Normal3(mNormal[vertex.NormalIndex.Value]);
 						}
-
 						GL.Vertex3(mPos[vertex.PositionIndex.Value]);
 					}
-
 					GL.End();
 				}
 			}
@@ -445,10 +436,8 @@ namespace arookas {
 			// normals
 			if (renderFlags.HasFlag(demoRenderFlags.NBT)) {
 				const float normalLength = 0.0625f;
-
 				GL.Disable(EnableCap.Lighting);
 				GL.Begin(BeginMode.Lines);
-
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive) {
 						if (vertex.NormalIndex != null) {
@@ -456,13 +445,11 @@ namespace arookas {
 							GL.Vertex3(mPos[vertex.PositionIndex.Value]);
 							GL.Vertex3(mPos[vertex.PositionIndex.Value] + mNormal[vertex.NormalIndex.Value] * normalLength);
 						}
-
 						if (vertex.TangentIndex != null) {
 							GL.Color4(Color4.Green);
 							GL.Vertex3(mPos[vertex.PositionIndex.Value]);
 							GL.Vertex3(mPos[vertex.PositionIndex.Value] + mNormal[vertex.TangentIndex.Value + 2] * normalLength);
 						}
-
 						if (vertex.BinormalIndex != null) {
 							GL.Color4(Color4.Blue);
 							GL.Vertex3(mPos[vertex.PositionIndex.Value]);
@@ -470,7 +457,6 @@ namespace arookas {
 						}
 					}
 				}
-
 				GL.End();
 				GL.Enable(EnableCap.Lighting);
 			}
@@ -487,7 +473,7 @@ namespace arookas {
 
 		public void Dispose() {
 			if (!mDisposed) {
-				GL.DeleteTextures(mId.Length, mId);
+				GL.DeleteTextures(mIds.Length, mIds);
 				mDisposed = true;
 			}
 		}
