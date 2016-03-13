@@ -49,9 +49,9 @@ namespace arookas {
 		}
 		void initViewport() {
 
-			GL.Viewport(gl_frame.ClientRectangle.Size);
+			GL.Viewport(glFrame.ClientRectangle.Size);
 			GL.MatrixMode(MatrixMode.Projection);
-			Matrix4 perspectiveMatrix = Matrix4.CreatePerspectiveFieldOfView(60.0f * (float)aMath.cDegToRad, (float)gl_frame.ClientRectangle.Width / gl_frame.ClientRectangle.Height, cNearClip, cFarClip);
+			Matrix4 perspectiveMatrix = Matrix4.CreatePerspectiveFieldOfView(60.0f * (float)aMath.cDegToRad, (float)glFrame.ClientRectangle.Width / glFrame.ClientRectangle.Height, cNearClip, cFarClip);
 			GL.LoadMatrix(ref perspectiveMatrix);
 		}
 		void initTimer() {
@@ -106,10 +106,10 @@ namespace arookas {
 					Tag = bin,
 				};
 				loadBinNode(binNode.Nodes, bin, 0);
-				tvw_models.BeginUpdate();
-				tvw_models.Nodes.Add(binNode);
-				tvw_models.EndUpdate();
-				gl_frame.Invalidate();
+				tvwModels.BeginUpdate();
+				tvwModels.Nodes.Add(binNode);
+				tvwModels.EndUpdate();
+				glFrame.Invalidate();
 				mModels.Add(bin);
 			}
 			updateTitle();
@@ -117,11 +117,8 @@ namespace arookas {
 		public void closeModel(demoBinModel model) {
 			model.Dispose();
 			mModels.Remove(model);
-			tvw_models.Nodes.Remove(tvw_models.Nodes.Cast<TreeNode>().First(node => node.Tag == model));
-			if (tvw_models.Nodes.Count == 0) {
-				evSelectModel(null, new TreeViewEventArgs(null));
-			}
-			gl_frame.Invalidate();
+			tvwModels.Nodes.Remove(tvwModels.Nodes.Cast<TreeNode>().First(node => node.Tag == model));
+			glFrame.Invalidate();
 			updateTitle();
 		}
 		public void closeModels() {
@@ -188,7 +185,7 @@ namespace arookas {
 				renderGrid(20);
 			}
 
-			gl_frame.SwapBuffers();
+			glFrame.SwapBuffers();
 		}
 		void renderGrid(int size) {
 			GL.Disable(EnableCap.Lighting);
@@ -256,7 +253,7 @@ namespace arookas {
 				}
 
 				if (invalidate) {
-					gl_frame.Invalidate();
+					glFrame.Invalidate();
 				}
 			}
 		}
@@ -277,43 +274,43 @@ namespace arookas {
 		}
 
 		void evClickAlphaTest(object sender, EventArgs e) {
-			mAlphaTest = btn_alphatest.Checked;
-			gl_frame.Invalidate();
+			mAlphaTest = btnAlphaTest.Checked;
+			glFrame.Invalidate();
 		}
 		void evClickBounds(object sender, EventArgs e) {
-			mShowBounds = btn_bbox.Checked;
-			gl_frame.Invalidate();
+			mShowBounds = btnBounds.Checked;
+			glFrame.Invalidate();
 		}
 		void evClickGrid(object sender, EventArgs e) {
-			mShowGrid = btn_grid.Checked;
-			gl_frame.Invalidate();
+			mShowGrid = btnGrid.Checked;
+			glFrame.Invalidate();
 		}
 		void evClickInvertLook(object sender, EventArgs e) {
-			mInvertLook = btn_invertLook.Checked;
-			gl_frame.Invalidate();
+			mInvertLook = btnInvertLook.Checked;
+			glFrame.Invalidate();
 		}
 		void evClickWireframe(object sender, EventArgs e) {
-			mPolyMode = (btn_wireframe.Checked ? PolygonMode.Line : PolygonMode.Fill);
-			gl_frame.Invalidate();
+			mPolyMode = (btnWireFrame.Checked ? PolygonMode.Line : PolygonMode.Fill);
+			glFrame.Invalidate();
 		}
 		void evClickCeilings(object sender, EventArgs e) {
-			mShowCeilings = btn_ceilings.Checked;
-			gl_frame.Invalidate();
+			mShowCeilings = btnCeilings.Checked;
+			glFrame.Invalidate();
 		}
 		void evClickFourthWalls(object sender, EventArgs e) {
-			mShowFourthWalls = btn_fourthwalls.Checked;
-			gl_frame.Invalidate();
+			mShowFourthWalls = btnFourthWalls.Checked;
+			glFrame.Invalidate();
 		}
 		void evClickNBT(object sender, EventArgs e) {
-			mShowNBT = btn_nbt.Checked;
-			gl_frame.Invalidate();
+			mShowNBT = btnNBT.Checked;
+			glFrame.Invalidate();
 		}
 
 		void evClickImport(object sender, EventArgs e) {
 			evClickOpen(sender, e);
 		}
 		void evClickUnload(object sender, EventArgs e) {
-			closeModel(tvw_models.SelectedNode.Tag as demoBinModel);
+			closeModel(tvwModels.SelectedNode.Tag as demoBinModel);
 		}
 
 		void evToggleVisible(object sender, TreeViewEventArgs e) {
@@ -321,10 +318,7 @@ namespace arookas {
 				var renderable = (e.Node.Tag as IRenderable);
 				renderable.Visible = !renderable.Visible;
 			}
-			gl_frame.Invalidate();
-		}
-		void evSelectModel(object sender, TreeViewEventArgs e) {
-			btn_unload.Enabled = !(e.Node == null || !(e.Node.Tag is demoBinModel));
+			glFrame.Invalidate();
 		}
 
 		void evGLDragDrop(object sender, DragEventArgs e) {
@@ -369,7 +363,7 @@ namespace arookas {
 		}
 		void evGLResize(object sender, EventArgs e) {
 			initViewport();
-			gl_frame.Invalidate();
+			glFrame.Invalidate();
 		}
 	}
 
