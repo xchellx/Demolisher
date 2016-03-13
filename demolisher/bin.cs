@@ -550,9 +550,7 @@ namespace arookas {
 			mFlags = (demoObjectFlags)reader.Read8();
 
 			if (reader.Read16() != 0) {
-#if AROOKAS_DEMOLISHER_CHECKPADDING
-				throw new Exception(String.Format("GraphObject padding != 0 at 0x{0:X8}.", reader.Stream.Position));
-#endif
+				throw new Exception("object padding != 0 (after flags)");
 			}
 
 			mScale = reader.readVec3();
@@ -564,17 +562,13 @@ namespace arookas {
 			var partCount = reader.ReadS16();
 
 			if (reader.Read16() != 0) {
-#if AROOKAS_DEMOLISHER_CHECKPADDING
-				throw new Exception(String.Format("GraphObject padding != 0 at 0x{0:X8}.", reader.Stream.Position));
-#endif
+				throw new Exception("object padding != 0 (after part count)");
 			}
 
 			var partOffset = reader.ReadS32();
 
-			if (reader.Read32s(7).Any(zero => zero != 0)) {
-#if AROOKAS_DEMOLISHER_CHECKPADDING
-				throw new Exception(String.Format("GraphObject padding != 0 at 0x{0:X8}.", reader.Stream.Position));
-#endif
+			if (reader.Read32s(7).Any(zero => zero != 0)) { // pretty sure these are runtime fields
+				throw new Exception("object padding != 0 (after part offset)");
 			}
 
 			reader.Keep();
