@@ -20,10 +20,10 @@ namespace arookas {
 				return;
 			}
 			setHidden(false);
-			lblIndexNum.Text = String.Format("#{0}", mObject.Parent);
-			lblChildNum.Text = String.Format("#{0}", mObject.Child);
-			lblNextNum.Text = String.Format("#{0}", mObject.Next);
-			lblPrevNum.Text = String.Format("#{0}", mObject.Prev);
+			updateIndexLabel(lblIndexNum, mObject.Parent);
+			updateIndexLabel(lblChildNum, mObject.Child);
+			updateIndexLabel(lblNextNum, mObject.Next);
+			updateIndexLabel(lblPrevNum, mObject.Prev);
 
 			chkFlag1.Checked = mObject.hasFlag(demoObjectFlags.UNK01);
 			chkFlag2.Checked = mObject.hasFlag(demoObjectFlags.UNK02);
@@ -33,6 +33,16 @@ namespace arookas {
 			chkFlag6.Checked = mObject.hasFlag(demoObjectFlags.UNK20);
 			chkFlag7.Checked = mObject.hasFlag(demoObjectFlags.FULLBRIGHT);
 			chkFlag8.Checked = mObject.hasFlag(demoObjectFlags.CEILING);
+		}
+		void updateIndexLabel(Label label, int index) {
+			if (index >= 0) {
+				label.Enabled = true;
+				label.Text = String.Format("#{0:D3}", index);
+			}
+			else {
+				label.Enabled = false;
+				label.Text = "None";
+			}
 		}
 
 		public demoObject setObject(demoObject obj) {
