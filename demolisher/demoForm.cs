@@ -99,7 +99,7 @@ namespace arookas {
 		}
 		public void loadModel(string file, Vector3 pos, Vector3 rot, Vector3 scale) {
 			if (file.EndsWith(".bin", StringComparison.InvariantCultureIgnoreCase)) {
-				demoBinModel bin = new demoBinModel(file, pos, rot, scale);
+				var bin = new demoBinModel(file, pos, rot, scale);
 				var binNode = new TreeNode() {
 					Checked = true,
 					Text = bin.Name,

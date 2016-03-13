@@ -32,34 +32,6 @@ namespace arookas {
 		const float cGlobalScale = 256.0f;
 		const float cGlobalScaleReciprocal = (1.0f / cGlobalScale);
 
-		bool HasTextures {
-			get { return (TextureOffset > 0); }
-		}
-		bool HasMaterials {
-			get { return (MaterialOffset > 0); }
-		}
-		bool HasPositions {
-			get { return (PositionOffset > 0); }
-		}
-		bool HasNormals {
-			get { return (NormalOffset > 0); }
-		}
-		bool HasCoord0s {
-			get { return (Coord0Offset > 0); }
-		}
-		bool HasCoord1s {
-			get { return (Coord1Offset > 0); }
-		}
-		bool HasShaders {
-			get { return (ShaderOffset > 0); }
-		}
-		bool HasBatches {
-			get { return (BatchOffset > 0); }
-		}
-		bool HasGraph {
-			get { return (GraphOffset > 0); }
-		}
-
 		uint TextureOffset {
 			get { return mOffsets[0]; }
 		}
@@ -122,7 +94,7 @@ namespace arookas {
 			mName = mReader.ReadString<aCSTR>(11);
 			mOffsets = mReader.Read32s(21);
 
-			mGraph = (HasGraph ? fetchGraphObjects(0) : new demoObject[0]);
+			mGraph = (GraphOffset > 0 ? fetchObjects(0) : new demoObject[0]);
 			mBatch = loadSection(calcBatchCount(), fetchBatch);
 			mShader = loadSection(calcShaderCount(), fetchShader);
 			mMaterial = loadSection(calcMaterialCount(), fetchMaterial);
@@ -264,15 +236,15 @@ namespace arookas {
 			mReader.Back();
 			return obj;
 		}
-		demoObject[] fetchGraphObjects(int index) {
+		demoObject[] fetchObjects(int index) {
 			var objs = new List<demoObject>(10);
 			var obj = fetchObject(index);
 			objs.Add(obj);
 			if (obj.Child >= 0) {
-				objs.AddRange(fetchGraphObjects(obj.Child));
+				objs.AddRange(fetchObjects(obj.Child));
 			}
 			if (obj.Next >= 0) {
-				objs.AddRange(fetchGraphObjects(obj.Next));
+				objs.AddRange(fetchObjects(obj.Next));
 			}
 			return objs.ToArray();
 		}
@@ -785,7 +757,7 @@ namespace arookas {
 			mMaterial = reader.ReadS16s(8);
 			mUnk3 = reader.ReadS16s(8);
 			if (mUnk3[0] != 0 || mUnk3[1] != -1) {
-				throw new Exception("shader unk3!!");
+				// throw new Exception("shader unk3!!");
 			}
 		}
 	}
