@@ -18,15 +18,15 @@ namespace arookas {
 		uint[] mOffsets;
 		bool mDisposed;
 
-		demoObject[] mGraph;
-		demoBatch[] mBatch;
-		demoShader[] mShader;
-		demoMaterial[] mMaterial;
-		demoTexture[] mTexture;
-		Vector3[] mPos;
-		Vector3[] mNormal;
-		Vector2[] mCoord0;
-		Vector2[] mCoord1;
+		demoObject[] mObjects;
+		demoBatch[] mBatchs;
+		demoShader[] mShaders;
+		demoMaterial[] mMaterials;
+		demoTexture[] mTextures;
+		Vector3[] mPositions;
+		Vector3[] mNormals;
+		Vector2[] mCoord0s;
+		Vector2[] mCoord1s;
 		int[] mIds;
 
 		const float cGlobalScale = 256.0f;
@@ -61,21 +61,21 @@ namespace arookas {
 		}
 
 		public bool Visible {
-			get { return mGraph[0].Visible; }
-			set { mGraph[0].Visible = value; }
+			get { return mObjects[0].Visible; }
+			set { mObjects[0].Visible = value; }
 		}
 
 		public Vector3 Position {
-			get { return mGraph[0].Position; }
-			set { mGraph[0].Position = value; }
+			get { return mObjects[0].Position; }
+			set { mObjects[0].Position = value; }
 		}
 		public Vector3 Rotation {
-			get { return mGraph[0].Rotation; }
-			set { mGraph[0].Rotation = value; }
+			get { return mObjects[0].Rotation; }
+			set { mObjects[0].Rotation = value; }
 		}
 		public Vector3 Scale {
-			get { return mGraph[0].Scale; }
-			set { mGraph[0].Scale = value; }
+			get { return mObjects[0].Scale; }
+			set { mObjects[0].Scale = value; }
 		}
 
 		public string Name {
@@ -83,7 +83,7 @@ namespace arookas {
 		}
 
 		public demoObject this[int index] {
-			get { return mGraph[index]; }
+			get { return mObjects[index]; }
 		}
 
 		public demoBinModel(string file)
@@ -94,17 +94,17 @@ namespace arookas {
 			mName = mReader.ReadString<aCSTR>(11);
 			mOffsets = mReader.Read32s(21);
 
-			mGraph = (GraphOffset > 0 ? fetchObjects(0) : new demoObject[0]);
-			mBatch = loadSection(calcBatchCount(), fetchBatch);
-			mShader = loadSection(calcShaderCount(), fetchShader);
-			mMaterial = loadSection(calcMaterialCount(), fetchMaterial);
-			mTexture = loadSection(calcTextureCount(), fetchTexture);
-			mPos = loadSection(calcPositionCount(), fetchPosition);
-			mNormal = loadSection(calcNormalCount(), fetchNormal);
-			mCoord0 = loadSection(calcCoord0Count(), fetchCoord0);
-			mCoord1 = loadSection(calcCoord1Count(), fetchCoord1);
+			mObjects = (GraphOffset > 0 ? fetchObjects(0) : new demoObject[0]);
+			mBatchs = loadSection(calcBatchCount(), fetchBatch);
+			mShaders = loadSection(calcShaderCount(), fetchShader);
+			mMaterials = loadSection(calcMaterialCount(), fetchMaterial);
+			mTextures = loadSection(calcTextureCount(), fetchTexture);
+			mPositions = loadSection(calcPositionCount(), fetchPosition);
+			mNormals = loadSection(calcNormalCount(), fetchNormal);
+			mCoord0s = loadSection(calcCoord0Count(), fetchCoord0);
+			mCoord1s = loadSection(calcCoord1Count(), fetchCoord1);
 
-			mIds = mTexture.Select(texture => texture.toGL()).ToArray();
+			mIds = mTextures.Select(texture => texture.toGL()).ToArray();
 
 			Position = pos;
 			Rotation = rot;
@@ -117,7 +117,7 @@ namespace arookas {
 
 		int calcBatchCount() {
 			var batch = -1;
-			foreach (var obj in mGraph) {
+			foreach (var obj in mObjects) {
 				foreach (var part in obj) {
 					if (part.Batch > batch) {
 						batch = part.Batch;
@@ -128,7 +128,7 @@ namespace arookas {
 		}
 		int calcMaterialCount() {
 			var material = -1;
-			foreach (var shader in mShader) {
+			foreach (var shader in mShaders) {
 				if (shader.Material.Max() > material) {
 					material = shader.Material.Max();
 				}
@@ -137,7 +137,7 @@ namespace arookas {
 		}
 		int calcNormalCount() {
 			var normal = -1;
-			foreach (var batch in mBatch) {
+			foreach (var batch in mBatchs) {
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive.Where(vertex => vertex.NormalIndex != null)) {
 						if (vertex.NormalIndex > normal) {
@@ -160,7 +160,7 @@ namespace arookas {
 		}
 		int calcPositionCount() {
 			var pos = -1;
-			foreach (var batch in mBatch) {
+			foreach (var batch in mBatchs) {
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive.Where(vertex => vertex.PositionIndex != null)) {
 						if (vertex.PositionIndex > pos) {
@@ -173,7 +173,7 @@ namespace arookas {
 		}
 		int calcShaderCount() {
 			var shader = -1;
-			foreach (var obj in mGraph) {
+			foreach (var obj in mObjects) {
 				foreach (var part in obj) {
 					if (part.Shader > shader) {
 						shader = part.Shader;
@@ -184,7 +184,7 @@ namespace arookas {
 		}
 		int calcTextureCount() {
 			var tex = 0;
-			foreach (var material in mMaterial) {
+			foreach (var material in mMaterials) {
 				if (material.mTex > tex) {
 					tex = material.mTex;
 				}
@@ -193,7 +193,7 @@ namespace arookas {
 		}
 		int calcCoord0Count() {
 			var coord0 = -1;
-			foreach (var batch in mBatch) {
+			foreach (var batch in mBatchs) {
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive.Where(vertex => vertex.UVIndex[0] != null && vertex.UVIndex[0] > coord0)) {
 						coord0 = vertex.UVIndex[0].Value;
@@ -204,7 +204,7 @@ namespace arookas {
 		}
 		int calcCoord1Count() {
 			var coord1 = -1;
-			foreach (var batch in mBatch) {
+			foreach (var batch in mBatchs) {
 				foreach (var primitive in batch) {
 					foreach (var vertex in primitive.Where(vertex => vertex.UVIndex[1] != null && vertex.UVIndex[1] > coord1)) {
 						coord1 = vertex.UVIndex[1].Value;
@@ -318,8 +318,8 @@ namespace arookas {
 
 		public void render(demoRenderFlags flags) {
 			GL.PushMatrix();
-			for (var index = 0; index >= 0; index = mGraph[index].Next) {
-				renderObject(mGraph[index], flags);
+			for (var index = 0; index >= 0; index = mObjects[index].Next) {
+				renderObject(mObjects[index], flags);
 			}
 			GL.PopMatrix();
 		}
@@ -351,19 +351,19 @@ namespace arookas {
 				GL.Disable(EnableCap.Lighting);
 			}
 			foreach (var part in obj) {
-				if (mShader[part.Shader].Tint.a > 0 && ((mShader[part.Shader].Tint.a == aRGBA.cOpaque && flags.HasFlag(demoRenderFlags.OPAQUE)) || (mShader[part.Shader].Tint.a < aRGBA.cOpaque && flags.HasFlag(demoRenderFlags.TRANSLUCENT)))) {
+				if (mShaders[part.Shader].Tint.a > 0 && ((mShaders[part.Shader].Tint.a == aRGBA.cOpaque && flags.HasFlag(demoRenderFlags.OPAQUE)) || (mShaders[part.Shader].Tint.a < aRGBA.cOpaque && flags.HasFlag(demoRenderFlags.TRANSLUCENT)))) {
 					renderPart(part, flags);
 				}
 			}
 			GL.Enable(EnableCap.Lighting);
-			for (int childIndex = obj.Child; childIndex >= 0; childIndex = mGraph[childIndex].Next) {
-				renderObject(mGraph[childIndex], flags);
+			for (int childIndex = obj.Child; childIndex >= 0; childIndex = mObjects[childIndex].Next) {
+				renderObject(mObjects[childIndex], flags);
 			}
 			GL.PopMatrix();
 		}
 		void renderPart(demoPart part, demoRenderFlags renderFlags) {
-			GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, gl.convert(mShader[part.Shader].Tint));
-			var batch = mBatch[part.Batch];
+			GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, gl.convert(mShaders[part.Shader].Tint));
+			var batch = mBatchs[part.Batch];
 
 			if (batch.UseNBT) { // bump map
 				var binormalAttribute = GL.GetAttribLocation(Program.sEmboss, "inBinormal");
@@ -376,16 +376,16 @@ namespace arookas {
 
 				GL.ActiveTexture(TextureUnit.Texture0 + 0);
 				GL.Enable(EnableCap.Texture2D);
-				GL.BindTexture(TextureTarget.Texture2D, mIds[mMaterial[mShader[part.Shader].Material[0]].mTex]);
-				gl.setWrapModeS(mMaterial[mShader[part.Shader].Material[0]].mWrapS);
-				gl.setWrapModeT(mMaterial[mShader[part.Shader].Material[0]].mWrapT);
+				GL.BindTexture(TextureTarget.Texture2D, mIds[mMaterials[mShaders[part.Shader].Material[0]].mTex]);
+				gl.setWrapModeS(mMaterials[mShaders[part.Shader].Material[0]].mWrapS);
+				gl.setWrapModeT(mMaterials[mShaders[part.Shader].Material[0]].mWrapT);
 				GL.Uniform1(diffuseMap, 0);
 
 				GL.ActiveTexture(TextureUnit.Texture0 + 1);
 				GL.Enable(EnableCap.Texture2D);
-				GL.BindTexture(TextureTarget.Texture2D, mIds[mMaterial[mShader[part.Shader].Material[1]].mTex]);
-				gl.setWrapModeS(mMaterial[mShader[part.Shader].Material[1]].mWrapS);
-				gl.setWrapModeT(mMaterial[mShader[part.Shader].Material[1]].mWrapT);
+				GL.BindTexture(TextureTarget.Texture2D, mIds[mMaterials[mShaders[part.Shader].Material[1]].mTex]);
+				gl.setWrapModeS(mMaterials[mShaders[part.Shader].Material[1]].mWrapS);
+				gl.setWrapModeT(mMaterials[mShaders[part.Shader].Material[1]].mWrapT);
 				GL.Uniform1(bumpMap, 1);
 
 				GL.Uniform1(embossFactor, 2.0f);
@@ -393,12 +393,12 @@ namespace arookas {
 				foreach (var primitive in batch) {
 					GL.Begin(primitive.GLType);
 					foreach (var vertex in primitive) {
-						GL.MultiTexCoord2(TextureUnit.Texture0 + 0, ref mCoord0[vertex.UVIndex[0].Value]);
-						GL.MultiTexCoord2(TextureUnit.Texture0 + 1, ref mCoord1[vertex.UVIndex[1].Value]);
-						GL.Normal3(mNormal[vertex.NormalIndex.Value]);
-						GL.VertexAttrib3(tangentAttribute, ref mNormal[vertex.BinormalIndex.Value + 1]);
-						GL.VertexAttrib3(binormalAttribute, ref mNormal[vertex.TangentIndex.Value + 2]);
-						GL.Vertex3(mPos[vertex.PositionIndex.Value]);
+						GL.MultiTexCoord2(TextureUnit.Texture0 + 0, ref mCoord0s[vertex.UVIndex[0].Value]);
+						GL.MultiTexCoord2(TextureUnit.Texture0 + 1, ref mCoord1s[vertex.UVIndex[1].Value]);
+						GL.Normal3(mNormals[vertex.NormalIndex.Value]);
+						GL.VertexAttrib3(tangentAttribute, ref mNormals[vertex.BinormalIndex.Value + 1]);
+						GL.VertexAttrib3(binormalAttribute, ref mNormals[vertex.TangentIndex.Value + 2]);
+						GL.Vertex3(mPositions[vertex.PositionIndex.Value]);
 					}
 					GL.End();
 				}
@@ -406,10 +406,10 @@ namespace arookas {
 			}
 			else {
 				for (int texUnit = 0; texUnit < 8; texUnit++) {
-					if (mShader[part.Shader].Material[texUnit] < 0) {
+					if (mShaders[part.Shader].Material[texUnit] < 0) {
 						continue;
 					}
-					var material = mMaterial[mShader[part.Shader].Material[texUnit]];
+					var material = mMaterials[mShaders[part.Shader].Material[texUnit]];
 					GL.ActiveTexture(TextureUnit.Texture0 + texUnit);
 					GL.Enable(EnableCap.Texture2D);
 					GL.BindTexture(TextureTarget.Texture2D, mIds[material.mTex]);
@@ -420,12 +420,12 @@ namespace arookas {
 					GL.Begin(primitive.GLType);
 					foreach (var vertex in primitive) {
 						if (vertex.UVIndex[0] != null) {
-							GL.MultiTexCoord2(TextureUnit.Texture0, ref mCoord0[vertex.UVIndex[0].Value]);
+							GL.MultiTexCoord2(TextureUnit.Texture0, ref mCoord0s[vertex.UVIndex[0].Value]);
 						}
 						if (vertex.NormalIndex != null) {
-							GL.Normal3(mNormal[vertex.NormalIndex.Value]);
+							GL.Normal3(mNormals[vertex.NormalIndex.Value]);
 						}
-						GL.Vertex3(mPos[vertex.PositionIndex.Value]);
+						GL.Vertex3(mPositions[vertex.PositionIndex.Value]);
 					}
 					GL.End();
 				}
@@ -442,18 +442,18 @@ namespace arookas {
 					foreach (var vertex in primitive) {
 						if (vertex.NormalIndex != null) {
 							GL.Color4(Color4.Red);
-							GL.Vertex3(mPos[vertex.PositionIndex.Value]);
-							GL.Vertex3(mPos[vertex.PositionIndex.Value] + mNormal[vertex.NormalIndex.Value] * normalLength);
+							GL.Vertex3(mPositions[vertex.PositionIndex.Value]);
+							GL.Vertex3(mPositions[vertex.PositionIndex.Value] + mNormals[vertex.NormalIndex.Value] * normalLength);
 						}
 						if (vertex.TangentIndex != null) {
 							GL.Color4(Color4.Green);
-							GL.Vertex3(mPos[vertex.PositionIndex.Value]);
-							GL.Vertex3(mPos[vertex.PositionIndex.Value] + mNormal[vertex.TangentIndex.Value + 2] * normalLength);
+							GL.Vertex3(mPositions[vertex.PositionIndex.Value]);
+							GL.Vertex3(mPositions[vertex.PositionIndex.Value] + mNormals[vertex.TangentIndex.Value + 2] * normalLength);
 						}
 						if (vertex.BinormalIndex != null) {
 							GL.Color4(Color4.Blue);
-							GL.Vertex3(mPos[vertex.PositionIndex.Value]);
-							GL.Vertex3(mPos[vertex.PositionIndex.Value] + mNormal[vertex.BinormalIndex.Value + 1] * normalLength);
+							GL.Vertex3(mPositions[vertex.PositionIndex.Value]);
+							GL.Vertex3(mPositions[vertex.PositionIndex.Value] + mNormals[vertex.BinormalIndex.Value + 1] * normalLength);
 						}
 					}
 				}
