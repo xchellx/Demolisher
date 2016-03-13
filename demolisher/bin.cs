@@ -569,9 +569,9 @@ namespace arookas {
 #endif
 			}
 
-			mScale = new Vector3(reader.ReadF32(), reader.ReadF32(), reader.ReadF32());
-			mRot = new Vector3(reader.ReadF32(), reader.ReadF32(), reader.ReadF32());
-			mPos = new Vector3(reader.ReadF32(), reader.ReadF32(), reader.ReadF32());
+			mScale = reader.readVec3();
+			mRot = reader.readVec3();
+			mPos = reader.readVec3();
 			mBounds = new demoBoundingBox(reader.readVec3(), reader.readVec3());
 			mUnk3 = reader.ReadF32();
 
