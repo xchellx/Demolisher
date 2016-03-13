@@ -604,7 +604,7 @@ namespace arookas {
 		short mShader, mBatch;
 
 		public short Shader {
-			get { return mBatch; }
+			get { return mShader; }
 		}
 		public short Batch {
 			get { return mBatch; }
