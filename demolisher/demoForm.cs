@@ -76,9 +76,7 @@ namespace arookas {
 					Text = String.Format("Object {0}", child),
 					Tag = bin[child],
 				};
-				if (bin[child].Child >= 0) {
-					loadBinNode(node.Nodes, bin, bin[child].Child);
-				}
+				loadBinNode(node.Nodes, bin, child);
 				nodes.Add(node);
 			}
 		}
