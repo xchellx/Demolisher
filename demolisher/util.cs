@@ -4,13 +4,22 @@ using OpenTK;
 namespace arookas {
 	static class demoUtil {
 		public static Vector3 readVec3(this aBinaryReader reader) {
-			return new Vector3(reader.ReadF32(), reader.ReadF32(), reader.ReadF32());
+			var x = reader.ReadF32();
+			var y = reader.ReadF32();
+			var z = reader.ReadF32();
+			return new Vector3(x, y, z);
 		}
 		public static int read24(this aBinaryReader reader) {
-			if (reader.Endianness == Endianness.Big) {
-				return (reader.Read8() << 16) | (reader.Read8() << 8) | reader.Read8();
+			var bytes = reader.Read8s(3);
+			switch (reader.Endianness) {
+				case Endianness.Big: {
+					return (bytes[0] << 16) | (bytes[1] << 8) | bytes[2];
+				}
+				case Endianness.Little: {
+					return (bytes[2] << 16) | (bytes[1] << 8) | bytes[0];
+				}
 			}
-			return reader.Read8() | (reader.Read8() << 8) | (reader.Read8() << 24);
+			return 0;
 		}
 		public static int readS24(this aBinaryReader reader) {
 			var value = read24(reader);
