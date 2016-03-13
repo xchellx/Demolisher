@@ -98,20 +98,18 @@ namespace arookas {
 			loadModel(file, Vector3.Zero, Vector3.Zero, Vector3.One);
 		}
 		public void loadModel(string file, Vector3 pos, Vector3 rot, Vector3 scale) {
-			if (file.EndsWith(".bin", StringComparison.InvariantCultureIgnoreCase)) {
-				var bin = new demoBinModel(file, pos, rot, scale);
-				var binNode = new TreeNode() {
-					Checked = true,
-					Text = bin.Name,
-					Tag = bin,
-				};
-				loadBinNode(binNode.Nodes, bin, 0);
-				tvwModels.BeginUpdate();
-				tvwModels.Nodes.Add(binNode);
-				tvwModels.EndUpdate();
-				glFrame.Invalidate();
-				mModels.Add(bin);
-			}
+			var bin = new demoBinModel(file, pos, rot, scale);
+			var binNode = new TreeNode() {
+				Checked = true,
+				Text = bin.Name,
+				Tag = bin,
+			};
+			loadBinNode(binNode.Nodes, bin, 0);
+			tvwModels.BeginUpdate();
+			tvwModels.Nodes.Add(binNode);
+			tvwModels.EndUpdate();
+			glFrame.Invalidate();
+			mModels.Add(bin);
 			updateTitle();
 		}
 		public void closeModel(demoBinModel model) {
