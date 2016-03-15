@@ -121,6 +121,8 @@ namespace arookas {
 			if (mModels.Count > 0) {
 				mModels.ForEach(model => model.Dispose());
 				mModels.Clear();
+				tvwModels.Nodes.Clear();
+				glFrame.Invalidate();
 				updateTitle();
 				Invalidate();
 			}
