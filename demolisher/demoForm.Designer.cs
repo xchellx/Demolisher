@@ -42,6 +42,7 @@
 			this.tvwModels = new System.Windows.Forms.TreeView();
 			this.glFrame = new OpenTK.GLControl();
 			this.panObjectProps = new arookas.demoObjectPropsControl();
+			this.btnCloseAll = new System.Windows.Forms.ToolStripMenuItem();
 			menMain = new System.Windows.Forms.MenuStrip();
 			menFile = new System.Windows.Forms.ToolStripMenuItem();
 			menView = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,8 @@
 			// menFile
 			// 
 			menFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnOpen});
+            this.btnOpen,
+            this.btnCloseAll});
 			menFile.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			menFile.Name = "menFile";
 			menFile.Size = new System.Drawing.Size(37, 20);
@@ -264,6 +266,14 @@
 			this.panObjectProps.Size = new System.Drawing.Size(880, 143);
 			this.panObjectProps.TabIndex = 5;
 			// 
+			// btnCloseAll
+			// 
+			this.btnCloseAll.Name = "btnCloseAll";
+			this.btnCloseAll.Size = new System.Drawing.Size(154, 22);
+			this.btnCloseAll.Text = "Close All";
+			this.btnCloseAll.ToolTipText = "Close all currently-loaded models";
+			this.btnCloseAll.Click += new System.EventHandler(this.evClickCloseAll);
+			// 
 			// demoForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,5 +315,6 @@
 		private System.Windows.Forms.ToolStripMenuItem btnNBT;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.Panel panScene;
+		private System.Windows.Forms.ToolStripMenuItem btnCloseAll;
 	}
 }

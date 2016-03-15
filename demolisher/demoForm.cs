@@ -268,6 +268,9 @@ namespace arookas {
 				}
 			}
 		}
+		void evClickCloseAll(object sender, EventArgs e) {
+			closeModels();
+		}
 
 		void evClickAlphaTest(object sender, EventArgs e) {
 			mAlphaTest = btnAlphaTest.Checked;
@@ -378,7 +381,6 @@ namespace arookas {
 			initViewport();
 			glFrame.Invalidate();
 		}
-
 	}
 
 	struct demoViewpoint {
