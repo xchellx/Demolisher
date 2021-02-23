@@ -196,7 +196,7 @@ namespace Arookas.Audio.MusicalInstrumentDigitalInterface
 			else
 			{
 				ChannelEventType channelEventType = (ChannelEventType)(statusByte & 240);
-				byte channelNumber = statusByte & 15;
+				byte channelNumber = (byte)(statusByte & 15);
 				if (!channelEventType.IsDefined<ChannelEventType>())
 				{
 					throw new InvalidDataException(string.Format("Encountered undefined channel-event type {0}.", channelEventType));

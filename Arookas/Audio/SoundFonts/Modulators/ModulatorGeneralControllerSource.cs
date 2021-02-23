@@ -37,7 +37,7 @@ namespace Arookas.Audio.SoundFonts.Modulators
 		// Token: 0x060001C0 RID: 448 RVA: 0x0000669A File Offset: 0x0000489A
 		internal override ushort ToInternal()
 		{
-			return (ushort)(base.Type << 10 | (ModulatorType)base.Polarity | (ModulatorType)base.Direction);
+			return (ushort)((int)base.Type << 10 | (int)base.Polarity | (int)base.Direction); // TODO: Cannot infer type, so: (ModularType) -> (int)
 		}
 
 		// Token: 0x040000CE RID: 206

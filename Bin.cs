@@ -93,14 +93,14 @@ namespace Arookas.Demolisher
 
 			// data
 			graphObjects = (HasGraph ? GetGraphObjects(0) : new GraphObject[0]);
-			batches = (HasBatches ? CollectionUtility.Initialize(GetBatchCount(), index => GetBatch(index)) : new Batch[0]);
-			shaders = (HasShaders ? CollectionUtility.Initialize(GetShaderCount(), index => GetShader(index)) : new Shader[0]);
-			materials = (HasMaterials ? CollectionUtility.Initialize(GetMaterialCount(), index => GetMaterial(index)) : new Material[0]);
-			textures = (HasTextures ? CollectionUtility.Initialize(GetTextureCount(), index => GetTexture(index)) : new Texture[0]);
-			positions = (HasPositions ? CollectionUtility.Initialize(GetPositionCount(), index => GetPosition(index)) : new Vector3[0]);
-			normals = (HasNormals ? CollectionUtility.Initialize(GetNormalCount(), index => GetNormal(index)) : new Vector3[0]);
-			texCoord0s = (HasTexCoord0s ? CollectionUtility.Initialize(GetTexCoord0Count(), index => GetTexCoord0(index)) : new Vector2[0]);
-			texCoord1s = (HasTexCoord1s ? CollectionUtility.Initialize(GetTexCoord1Count(), index => GetTexCoord1(index)) : new Vector2[0]);
+			batches = (HasBatches ? CollectionHelper.Initialize(GetBatchCount(), index => GetBatch(index)) : new Batch[0]);
+			shaders = (HasShaders ? CollectionHelper.Initialize(GetShaderCount(), index => GetShader(index)) : new Shader[0]);
+			materials = (HasMaterials ? CollectionHelper.Initialize(GetMaterialCount(), index => GetMaterial(index)) : new Material[0]);
+			textures = (HasTextures ? CollectionHelper.Initialize(GetTextureCount(), index => GetTexture(index)) : new Texture[0]);
+			positions = (HasPositions ? CollectionHelper.Initialize(GetPositionCount(), index => GetPosition(index)) : new Vector3[0]);
+			normals = (HasNormals ? CollectionHelper.Initialize(GetNormalCount(), index => GetNormal(index)) : new Vector3[0]);
+			texCoord0s = (HasTexCoord0s ? CollectionHelper.Initialize(GetTexCoord0Count(), index => GetTexCoord0(index)) : new Vector2[0]);
+			texCoord1s = (HasTexCoord1s ? CollectionHelper.Initialize(GetTexCoord1Count(), index => GetTexCoord1(index)) : new Vector2[0]);
 
 			// Load textures.
 			glTextures = textures.Select(texture => texture.ToGLTexture()).ToArray();

@@ -38,7 +38,7 @@ namespace Arookas.Demolisher
 		public Primitive(ABinaryReader binaryReader, bool useNBT, int uvCount, BatchAttributes attributes)
 		{
 			Type = (PrimitiveType)binaryReader.Read8();
-			vertices = CollectionUtility.Initialize<Vertex>(binaryReader.Read16(), () => new Vertex(binaryReader, useNBT, uvCount, attributes));
+			vertices = CollectionHelper.Initialize<Vertex>(binaryReader.Read16(), () => new Vertex(binaryReader, useNBT, uvCount, attributes));
 		}
 
 		public IEnumerator<Vertex> GetEnumerator()

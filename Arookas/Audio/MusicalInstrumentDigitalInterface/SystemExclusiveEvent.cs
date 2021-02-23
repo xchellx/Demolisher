@@ -106,7 +106,14 @@ namespace Arookas.Audio.MusicalInstrumentDigitalInterface
 			bool flag = this.type == SystemExclusiveEventType.Normal || this.type == SystemExclusiveEventType.Terminating;
 			ABinaryWriter abinaryWriter = new ABinaryWriter(stream, Endianness.Big);
 			abinaryWriter.WriteUIntVar(base.DeltaTime);
-			abinaryWriter.Write8((this.type == SystemExclusiveEventType.Normal) ? 240 : 247);
+			if (this.type == SystemExclusiveEventType.Normal)
+            {
+				abinaryWriter.Write8(240);
+            }
+			else
+			{
+				abinaryWriter.Write8(247);
+			}
 			abinaryWriter.WriteUIntVar((ulong)((long)((flag ? (this.data.Length + 1) : this.data.Length) + (this.HasWideManufacturerID ? 3 : 1))));
 			if (this.HasWideManufacturerID)
 			{

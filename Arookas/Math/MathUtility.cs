@@ -34,7 +34,7 @@ namespace Arookas.Math
 		// Token: 0x0600036C RID: 876 RVA: 0x0000C388 File Offset: 0x0000A588
 		public static bool Approximately(this float first, float second, float maximumDeviation)
 		{
-			return Math.Abs(first - second) <= maximumDeviation;
+			return System.Math.Abs(first - second) <= maximumDeviation;
 		}
 
 		// Token: 0x0600036D RID: 877 RVA: 0x0000C398 File Offset: 0x0000A598

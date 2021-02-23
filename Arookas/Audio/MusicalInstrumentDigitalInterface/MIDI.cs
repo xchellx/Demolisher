@@ -255,7 +255,7 @@ namespace Arookas.Audio.MusicalInstrumentDigitalInterface
 			int num = (int)abinaryReader.Read16();
 			if ((num & 32768) != 0)
 			{
-				midi.division = new SMPTEDivision((SMPTEFrameRate)(-(SMPTEFrameRate)(num >> 8)), num & 255);
+				midi.division = new SMPTEDivision((SMPTEFrameRate)(-(int)(num >> 8)), num & 255); // TODO: Cannot infer type, so: (ModularType) -> (int)
 			}
 			else
 			{
@@ -431,7 +431,7 @@ namespace Arookas.Audio.MusicalInstrumentDigitalInterface
 					else
 					{
 						ChannelEventType channelEventType = (ChannelEventType)(b2 & 240);
-						byte channelNumber = b2 & 15;
+						byte channelNumber = (byte)(b2 & 15);
 						if (!channelEventType.IsDefined<ChannelEventType>())
 						{
 							throw new InvalidDataException(string.Format("Encountered undefined channel-event type {0}.", channelEventType));
@@ -576,7 +576,7 @@ namespace Arookas.Audio.MusicalInstrumentDigitalInterface
 				if (this.division is SMPTEDivision)
 				{
 					SMPTEDivision smptedivision = this.division as SMPTEDivision;
-					mThdWriter.WriteS8((sbyte)(-smptedivision.FrameRate << 8));
+					mThdWriter.WriteS8((sbyte)(-(int)smptedivision.FrameRate << 8)); // TODO: Cannot infer type, so: (int)
 					mThdWriter.Write8((byte)smptedivision.TicksPerFrame);
 				}
 			});

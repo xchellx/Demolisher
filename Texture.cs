@@ -22,7 +22,7 @@ namespace Arookas.Demolisher
 			{
 				if (lookup4Bit == null)
 				{
-					lookup4Bit = CollectionUtility.Initialize(16, index => (int)(255.0d / 15.0d * index));
+					lookup4Bit = CollectionHelper.Initialize(16, index => (int)(255.0d / 15.0d * index));
 				}
 
 				return lookup4Bit;

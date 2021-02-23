@@ -406,7 +406,7 @@ namespace Arookas.IO.Binary
 			}
 			List<byte> list2;
 			int index;
-			(list2 = list)[index = list.Count - 1] = (list2[index] & 127);
+			(list2 = list)[index = list.Count - 1] = ((byte)(list2[index] & 127));
 			return list.ToArray();
 		}
 

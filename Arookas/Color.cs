@@ -278,13 +278,13 @@ namespace Arookas
 		}
 
 		// Token: 0x060000EF RID: 239 RVA: 0x00003D7F File Offset: 0x00001F7F
-		public Color(Color color)
+		public Color(System.Drawing.Color color)
 		{
 			this = new Color((int)color.R, (int)color.G, (int)color.B, (int)color.A);
 		}
 
 		// Token: 0x060000F0 RID: 240 RVA: 0x00003DA3 File Offset: 0x00001FA3
-		public Color(Color color, int alpha)
+		public Color(System.Drawing.Color color, int alpha)
 		{
 			this = new Color((int)color.R, (int)color.G, (int)color.B, alpha);
 		}
@@ -329,6 +329,18 @@ namespace Arookas
 		public static Color FromRGBA(uint rgba)
 		{
 			return new Color((int)(rgba >> 24 & 255U), (int)(rgba >> 16 & 255U), (int)(rgba >> 8 & 255U), (int)(rgba & 255U));
+		}
+
+		// Token: NONE RID: NONE RVA: NONE File Offset: NONE
+		public static Color FromARGB8(uint argb8)
+		{
+			return new Color((int)(argb8 >> 16 & 255U), (int)(argb8 >> 8 & 255U), (int)(argb8 & 255U), (int)(argb8 >> 24 & 255U));
+		}
+
+		// Token: NONE RID: NONE RVA: NONE File Offset: NONE
+		public static Color FromRGBA8(uint rgba8)
+		{
+			return new Color((int)(rgba8 >> 24 & 255U), (int)(rgba8 >> 16 & 255U), (int)(rgba8 >> 8 & 255U), (int)(rgba8 & 255U));
 		}
 
 		// Token: 0x060000F8 RID: 248 RVA: 0x00003EF4 File Offset: 0x000020F4
@@ -427,13 +439,13 @@ namespace Arookas
 		}
 
 		// Token: 0x06000104 RID: 260 RVA: 0x00004256 File Offset: 0x00002456
-		public static implicit operator Color(Color color)
+		public static implicit operator System.Drawing.Color(Color color)
 		{
-			return Color.FromArgb((int)color.alpha, (int)color.red, (int)color.green, (int)color.blue);
+			return System.Drawing.Color.FromArgb((int)color.alpha, (int)color.red, (int)color.green, (int)color.blue);
 		}
 
 		// Token: 0x06000105 RID: 261 RVA: 0x00004279 File Offset: 0x00002479
-		public static implicit operator Color(Color color)
+		public static implicit operator Color(System.Drawing.Color color)
 		{
 			return new Color((int)color.R, (int)color.G, (int)color.B, (int)color.A);
 		}

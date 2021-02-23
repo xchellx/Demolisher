@@ -30,7 +30,7 @@ namespace Arookas.Audio
 		{
 			get
 			{
-				return this.channelCount * this.bitsPerSample / 8;
+				return (ushort)(this.channelCount * this.bitsPerSample / 8);
 			}
 		}
 

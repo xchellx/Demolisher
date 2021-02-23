@@ -78,7 +78,7 @@ namespace Arookas.Demolisher
 			}
 
 			binaryReader.Goto(partOffset);
-			parts = CollectionUtility.Initialize<Part>(partCount, () => new Part(binaryReader));
+			parts = CollectionHelper.Initialize<Part>(partCount, () => new Part(binaryReader));
 			binaryReader.Back();
 		}
 

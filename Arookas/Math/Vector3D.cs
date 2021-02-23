@@ -11,7 +11,7 @@ namespace Arookas.Math
 		{
 			get
 			{
-				return (float)Math.Sqrt((double)this.MagnitudeSquared);
+				return (float)System.Math.Sqrt((double)this.MagnitudeSquared);
 			}
 		}
 

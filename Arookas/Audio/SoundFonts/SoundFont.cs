@@ -629,7 +629,7 @@ namespace Arookas.Audio.SoundFonts
 						});
 						if (modulatorDestination is ModulatorModulatorDestination)
 						{
-							list.Add(new Tuple<ModulatorModulatorDestination, ushort>(modulatorDestination as ModulatorModulatorDestination, instrumentModulators[l].sfModDestOper & 32767));
+							list.Add(new Tuple<ModulatorModulatorDestination, ushort>(modulatorDestination as ModulatorModulatorDestination, (ushort)(instrumentModulators[l].sfModDestOper & 32767)));
 						}
 					}
 					foreach (Tuple<ModulatorModulatorDestination, ushort> tuple in list)
@@ -728,7 +728,7 @@ namespace Arookas.Audio.SoundFonts
 						});
 						if (modulatorDestination is ModulatorModulatorDestination)
 						{
-							list.Add(new Tuple<ModulatorModulatorDestination, ushort>(modulatorDestination as ModulatorModulatorDestination, presetModulators[l].sfModDestOper & 32767));
+							list.Add(new Tuple<ModulatorModulatorDestination, ushort>(modulatorDestination as ModulatorModulatorDestination, (ushort)(presetModulators[l].sfModDestOper & 32767)));
 						}
 					}
 					foreach (Tuple<ModulatorModulatorDestination, ushort> tuple in list)

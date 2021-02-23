@@ -53,6 +53,9 @@
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
+    <Content Include="RefLib\Arookas 0.9\Arookas.dll" />
+    <Content Include="RefLib\Arookas 1.0\Arookas.dll" />
+    <Content Include="RefLib\arookas 1.1\arookas.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arookas\Audio\MusicalInstrumentDigitalInterface\ChannelAftertouchEvent.cs" />
@@ -273,8 +276,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="readme.md" />
-    <None Include="Shaders\emboss.fp" />
-    <None Include="Shaders\emboss.vp" />
+    <None Include="Shaders\emboss.fp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\emboss.vp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".git\objects\info\" />

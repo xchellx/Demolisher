@@ -49,43 +49,43 @@ namespace Arookas
 		// Token: 0x06000465 RID: 1125 RVA: 0x0000E3FC File Offset: 0x0000C5FC
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute>(this Assembly assembly) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(true);
+			return assembly.GetTypesWithAttribute<TAttribute>(true);
 		}
 
 		// Token: 0x06000466 RID: 1126 RVA: 0x0000E410 File Offset: 0x0000C610
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute>(this Assembly assembly, bool publicOnly) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(publicOnly, (Type type) => !type.IsAbstract);
+			return assembly.GetTypesWithAttribute<TAttribute>(publicOnly, (Type type) => !type.IsAbstract);
 		}
 
 		// Token: 0x06000467 RID: 1127 RVA: 0x0000E425 File Offset: 0x0000C625
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute>(this Assembly assembly, Func<Type, bool> predicate) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(true, predicate);
+			return assembly.GetTypesWithAttribute<TAttribute>(true, predicate);
 		}
 
 		// Token: 0x06000468 RID: 1128 RVA: 0x0000E42F File Offset: 0x0000C62F
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute>(this Assembly assembly, bool publicOnly, Func<Type, bool> predicate) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(publicOnly, predicate);
+			return assembly.GetTypesWithAttribute<TAttribute>(publicOnly, predicate);
 		}
 
 		// Token: 0x06000469 RID: 1129 RVA: 0x0000E439 File Offset: 0x0000C639
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute, TBase>(this Assembly assembly) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(true);
+			return assembly.GetTypesWithAttribute<TAttribute>(true);
 		}
 
 		// Token: 0x0600046A RID: 1130 RVA: 0x0000E44D File Offset: 0x0000C64D
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute, TBase>(this Assembly assembly, bool publicOnly) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(publicOnly, (Type type) => !type.IsAbstract);
+			return assembly.GetTypesWithAttribute<TAttribute>(publicOnly, (Type type) => !type.IsAbstract);
 		}
 
 		// Token: 0x0600046B RID: 1131 RVA: 0x0000E462 File Offset: 0x0000C662
 		public static Dictionary<TAttribute, Type> GetTypesWithAttribute<TAttribute, TBase>(this Assembly assembly, Func<Type, bool> predicate) where TAttribute : Attribute
 		{
-			return assembly.GetTypesWithAttribute(true, predicate);
+			return assembly.GetTypesWithAttribute<TAttribute>(true, predicate);
 		}
 
 		// Token: 0x0600046C RID: 1132 RVA: 0x0000E730 File Offset: 0x0000C930

@@ -204,7 +204,7 @@ namespace Arookas.Text.Formatting
 						{
 							throw new FormatException("Format string is invalid (formatted token is missing closing brace '}').");
 						}
-						formatTokenCollection.Add(new FormattedFormatToken(num, Math.Abs(value2), alignment, formatString2));
+						formatTokenCollection.Add(new FormattedFormatToken(num, System.Math.Abs(value2), alignment, formatString2));
 						stringBuilder.Clear();
 					}
 				}

@@ -673,7 +673,7 @@ namespace Arookas.IO.Binary
 			while (!base.IsAtEndOfStream)
 			{
 				long position2 = base.Position;
-				byte[] array = this.Read8s((int)Math.Min(4096L, base.BytesRemaining));
+				byte[] array = this.Read8s((int)System.Math.Min(4096L, base.BytesRemaining));
 				for (int i = 0; i <= array.Length - searchFor.Length; i++)
 				{
 					bool flag = true;
@@ -737,7 +737,7 @@ namespace Arookas.IO.Binary
 			while (!base.IsAtEndOfStream)
 			{
 				long position2 = base.Position;
-				byte[] array = this.Read8s((int)Math.Min(4096L, base.BytesRemaining));
+				byte[] array = this.Read8s((int)System.Math.Min(4096L, base.BytesRemaining));
 				for (int i = 0; i <= array.Length - searchForUpper.Length; i++)
 				{
 					bool flag = true;

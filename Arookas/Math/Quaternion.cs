@@ -111,7 +111,7 @@ namespace Arookas.Math
 		{
 			get
 			{
-				return (float)Math.Sqrt((double)this.MagnitudeSquared);
+				return (float)System.Math.Sqrt((double)this.MagnitudeSquared);
 			}
 		}
 
@@ -238,13 +238,13 @@ namespace Arookas.Math
 		// Token: 0x0600038C RID: 908 RVA: 0x0000C5E1 File Offset: 0x0000A7E1
 		public static float CalculateAngle(Quaternion quaternion)
 		{
-			return (float)(2.0 * Math.Acos((double)quaternion.w));
+			return (float)(2.0 * System.Math.Acos((double)quaternion.w));
 		}
 
 		// Token: 0x0600038D RID: 909 RVA: 0x0000C5FC File Offset: 0x0000A7FC
 		public static Vector3D CalculateAxis(Quaternion quaternion)
 		{
-			float num = (float)Math.Sqrt((double)(1f - quaternion.w * quaternion.w));
+			float num = (float)System.Math.Sqrt((double)(1f - quaternion.w * quaternion.w));
 			if (num < 1.401298E-45f)
 			{
 				return Vector3D.UnitX;
@@ -270,16 +270,16 @@ namespace Arookas.Math
 			float num = quaternion.x * quaternion.y + quaternion.z * quaternion.w;
 			if (num > 0.499f)
 			{
-				return new Vector3D((float)(Math.Atan2((double)quaternion.x, (double)quaternion.y) * 2.0), 1.57079637f, 0f);
+				return new Vector3D((float)(System.Math.Atan2((double)quaternion.x, (double)quaternion.y) * 2.0), 1.57079637f, 0f);
 			}
 			if (num < -0.499f)
 			{
-				return new Vector3D((float)(Math.Atan2((double)quaternion.x, (double)quaternion.w) * -2.0), 1.57079637f, 0f);
+				return new Vector3D((float)(System.Math.Atan2((double)quaternion.x, (double)quaternion.w) * -2.0), 1.57079637f, 0f);
 			}
 			double num2 = (double)(quaternion.x * quaternion.x);
 			double num3 = (double)(quaternion.y * quaternion.y);
 			double num4 = (double)(quaternion.z * quaternion.z);
-			return new Vector3D((float)Math.Atan2((double)(2f * quaternion.y * quaternion.w - 2f * quaternion.x * quaternion.z), 1.0 - 2.0 * num3 - 2.0 * num4), (float)Math.Asin((double)(2f * num)), (float)Math.Atan2((double)(2f * quaternion.x * quaternion.w - 2f * quaternion.y * quaternion.z), 1.0 - 2.0 * num2 - 2.0 * num4));
+			return new Vector3D((float)System.Math.Atan2((double)(2f * quaternion.y * quaternion.w - 2f * quaternion.x * quaternion.z), 1.0 - 2.0 * num3 - 2.0 * num4), (float)System.Math.Asin((double)(2f * num)), (float)System.Math.Atan2((double)(2f * quaternion.x * quaternion.w - 2f * quaternion.y * quaternion.z), 1.0 - 2.0 * num2 - 2.0 * num4));
 		}
 
 		// Token: 0x06000391 RID: 913 RVA: 0x0000C854 File Offset: 0x0000AA54
@@ -309,8 +309,8 @@ namespace Arookas.Math
 		// Token: 0x06000395 RID: 917 RVA: 0x0000CA00 File Offset: 0x0000AC00
 		public static Quaternion FromAxisAngle(Vector3D axis, float angle)
 		{
-			Vector3D vector3D = axis * (float)Math.Sin((double)(angle * 0.5f));
-			return new Quaternion(vector3D.X, vector3D.Y, vector3D.Z, (float)Math.Cos((double)(angle * 0.5f)));
+			Vector3D vector3D = axis * (float)System.Math.Sin((double)(angle * 0.5f));
+			return new Quaternion(vector3D.X, vector3D.Y, vector3D.Z, (float)System.Math.Cos((double)(angle * 0.5f)));
 		}
 
 		// Token: 0x06000396 RID: 918 RVA: 0x0000CA4C File Offset: 0x0000AC4C
@@ -325,16 +325,16 @@ namespace Arookas.Math
 		{
 			Vector3D normalized = (destination - source).Normalized;
 			float num = Vector3D.CalculateDotProduct(Vector3D.UnitZ, normalized);
-			if (Math.Abs(num + 1f) < 1.401298E-45f)
+			if (System.Math.Abs(num + 1f) < 1.401298E-45f)
 			{
 				return new Quaternion(Vector3D.UnitY.X, Vector3D.UnitY.Y, Vector3D.UnitY.Z, 3.14159274f);
 			}
-			if (Math.Abs(num - 1f) < 1.401298E-45f)
+			if (System.Math.Abs(num - 1f) < 1.401298E-45f)
 			{
 				return Quaternion.Identity;
 			}
 			Vector3D normalized2 = Vector3D.CalculateCrossProduct(Vector3D.UnitZ, normalized).Normalized;
-			float angle = (float)Math.Acos((double)num);
+			float angle = (float)System.Math.Acos((double)num);
 			return Quaternion.FromAxisAngle(normalized2, angle);
 		}
 
@@ -347,12 +347,12 @@ namespace Arookas.Math
 		// Token: 0x06000399 RID: 921 RVA: 0x0000CBA0 File Offset: 0x0000ADA0
 		public static Quaternion FromEulerAngles(float pitch, float yaw, float roll)
 		{
-			float num = (float)Math.Sin((double)(yaw * 0.5f));
-			float num2 = (float)Math.Sin((double)(roll * 0.5f));
-			float num3 = (float)Math.Sin((double)(pitch * 0.5f));
-			float num4 = (float)Math.Cos((double)(yaw * 0.5f));
-			float num5 = (float)Math.Cos((double)(roll * 0.5f));
-			float num6 = (float)Math.Cos((double)(pitch * 0.5f));
+			float num = (float)System.Math.Sin((double)(yaw * 0.5f));
+			float num2 = (float)System.Math.Sin((double)(roll * 0.5f));
+			float num3 = (float)System.Math.Sin((double)(pitch * 0.5f));
+			float num4 = (float)System.Math.Cos((double)(yaw * 0.5f));
+			float num5 = (float)System.Math.Cos((double)(roll * 0.5f));
+			float num6 = (float)System.Math.Cos((double)(pitch * 0.5f));
 			return new Quaternion(num * num2 * num6 + num4 * num5 * num3, num * num5 * num6 + num4 * num2 * num3, num4 * num2 * num6 - num * num5 * num3, num4 * num5 * num6 - num * num2 * num3);
 		}
 
@@ -391,8 +391,8 @@ namespace Arookas.Math
 			}
 			if (1f - num > 1.401298E-45f)
 			{
-				float num2 = (float)Math.Acos((double)num);
-				Vector3D vector3D = new Vector3D((float)Math.Sin((double)(num2 * (1f - percentage))), (float)Math.Sin((double)(num2 * percentage)), (float)Math.Sin((double)num2));
+				float num2 = (float)System.Math.Acos((double)num);
+				Vector3D vector3D = new Vector3D((float)System.Math.Sin((double)(num2 * (1f - percentage))), (float)System.Math.Sin((double)(num2 * percentage)), (float)System.Math.Sin((double)num2));
 				return new Quaternion((start.x * vector3D.X + end.x * vector3D.Y) / vector3D.Z, (start.y * vector3D.X + end.y * vector3D.Y) / vector3D.Z, (start.z * vector3D.X + end.z * vector3D.Y) / vector3D.Z, (start.w * vector3D.X + end.w * vector3D.Y) / vector3D.Z);
 			}
 			return Quaternion.Lerp(start, end, percentage);
