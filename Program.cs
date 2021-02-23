@@ -81,10 +81,10 @@ namespace Arookas.Demolisher
 				EmbossProgram.Attach(EmbossFragmentShader);
 				EmbossProgram.Link();
 			}
-			catch
+			catch (Exception exception)
 			{
 				MessageBox.Show(
-					"A problem occured while loading the emboss shader program. Make sure the emboss.vp and emboss.fp files are in the directory of the executable and do not contain syntax errors.",
+					"A problem occured while loading the emboss shader program. Make sure the emboss.vp and emboss.fp files are in the directory of the executable and do not contain syntax errors.\n\n" + exception.ToString(),
 					"Failed to load emboss shader",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

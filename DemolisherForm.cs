@@ -144,7 +144,7 @@ namespace Arookas.Demolisher
 			GL.Enable(EnableCap.LineSmooth);
 			GLUtility.EnableTexture2D();
 
-			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 			GL.FrontFace(FrontFaceDirection.Cw);
 			GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
 			GL.LineWidth(1.0f);
