@@ -6,7 +6,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.IO;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	static class Program
 	{

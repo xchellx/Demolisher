@@ -1,12 +1,12 @@
-﻿using arookas.Collections;
-using arookas.IO.Binary;
+﻿using Arookas.Collections;
+using Arookas.IO.Binary;
 using OpenTK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	class GraphObject : IRenderable, IEnumerable<Part>
 	{

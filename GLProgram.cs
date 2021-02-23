@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	public class GLProgram : IEnumerable<GLShader>, IDisposable
 	{

@@ -1,9 +1,9 @@
-﻿using arookas.Math;
+﻿using Arookas.Math;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	internal static class GLUtility
 	{

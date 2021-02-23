@@ -1,10 +1,10 @@
-﻿using arookas.IO;
-using arookas.IO.Binary;
+﻿using Arookas.IO;
+using Arookas.IO.Binary;
 using System;
 using System.IO;
 using System.Text;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	internal static class Yay0
 	{

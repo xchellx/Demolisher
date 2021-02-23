@@ -1,11 +1,11 @@
-﻿using arookas.Collections;
-using arookas.IO.Binary;
+﻿using Arookas.Collections;
+using Arookas.IO.Binary;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
 using System.Linq;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	class Texture
 	{

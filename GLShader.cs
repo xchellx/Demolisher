@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	public class GLShader : IDisposable
 	{

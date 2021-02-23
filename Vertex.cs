@@ -1,7 +1,7 @@
-﻿using arookas.Math;
-using arookas.IO.Binary;
+﻿using Arookas.Math;
+using Arookas.IO.Binary;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	struct Vertex
 	{

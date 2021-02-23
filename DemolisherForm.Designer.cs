@@ -1,4 +1,4 @@
-﻿namespace arookas.Demolisher
+﻿namespace Arookas.Demolisher
 {
 	partial class DemolisherForm
 	{

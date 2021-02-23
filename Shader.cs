@@ -1,6 +1,6 @@
-﻿using arookas.IO.Binary;
+﻿using Arookas.IO.Binary;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	struct Shader
 	{

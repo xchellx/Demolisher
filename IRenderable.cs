@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 
-namespace arookas.Demolisher
+namespace Arookas.Demolisher
 {
 	interface IRenderable
 	{

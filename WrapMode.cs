@@ -1,4 +1,4 @@
-﻿namespace arookas.Demolisher
+﻿namespace Arookas.Demolisher
 {
 	enum WrapMode
 	{
