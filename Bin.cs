@@ -4,6 +4,9 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -592,6 +595,211 @@ namespace Arookas.Demolisher
 				GL.DeleteTextures(glTextures.Length, glTextures);
 				isDisposed = true;
 			}
+		}
+
+		public void Export(string outputFolder, bool exportTextures, ImageFormat textureFormat, bool exportGeometry, bool onlyVisible, bool ignoreTransforms, bool swapU, bool swapV)
+		{
+			outputFolder = Path.Combine(outputFolder, name);
+			if (!Directory.Exists(outputFolder))
+			{
+				Directory.CreateDirectory(outputFolder);
+			}
+			if (exportTextures)
+			{
+				string text = Path.Combine(outputFolder, "textures");
+				if (!Directory.Exists(text))
+				{
+					Directory.CreateDirectory(text);
+				}
+				for (int i = 0; i < textures.Length; i++)
+				{
+					textures[i].ToBitmap().Save(Path.Combine(text, string.Format("texture {0}.{1}", i, textureFormat.GetExtension())), textureFormat);
+				}
+			}
+			if (exportGeometry)
+			{
+				string text2 = Path.Combine(outputFolder, "geometry");
+				if (!Directory.Exists(text2))
+				{
+					Directory.CreateDirectory(text2);
+				}
+				ExportGraphObject(text2, 0, onlyVisible, ignoreTransforms, swapU, swapV);
+			}
+		}
+
+		private void ExportGraphObject(string outputFolder, int index, bool onlyVisible, bool ignoreTransforms, bool swapU, bool swapV)
+		{
+			GraphObject graphObject = graphObjects[index];
+			if (graphObject.Visible && graphObject.PartCount > 0)
+			{
+				using (StreamWriter streamWriter = File.CreateText(Path.Combine(outputFolder, string.Format("object {0}.obj", index))))
+				{
+					streamWriter.WriteLine("# object {0}.obj converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
+					short[] posIndices = GetUsedVertexAttributes(graphObject, 0);
+					Vector3[] array = CollectionHelper.Initialize<Vector3>(posIndices.Length, (int i) => positions[(int)posIndices[i]]);
+					if (!ignoreTransforms)
+					{
+						array.Transform(delegate (Vector3 oP)
+						{
+							Vector3 vector4 = Vector3.Zero;
+							Vector3 left = Vector3.Zero;
+							Vector3 vector5 = Vector3.One;
+							for (int num2 = index; num2 >= 0; num2 = (int)graphObjects[num2].ParentIndex)
+							{
+								vector4 += graphObjects[num2].Position;
+								left += graphObjects[num2].Rotation;
+								vector5 = Vector3.Multiply(vector5, graphObjects[num2].Scale);
+							}
+							Vector3 left2 = Vector3.Multiply(oP, vector5);
+							return left2 + vector4 * 0.0039f;
+						});
+					}
+					streamWriter.WriteLine();
+					streamWriter.WriteLine("# vertices");
+					foreach (Vector3 vector in array)
+					{
+						TextWriter textWriter = streamWriter;
+						string format = "v {0} {1} {2}";
+						float x = vector.X;
+						object arg = x.ToString(CultureInfo.InvariantCulture);
+						float y = vector.Y;
+						object arg2 = y.ToString(CultureInfo.InvariantCulture);
+						float z = vector.Z;
+						textWriter.WriteLine(format, arg, arg2, z.ToString(CultureInfo.InvariantCulture));
+					}
+					short[] normalIndices = GetUsedVertexAttributes(graphObject, 1);
+					Vector3[] array3 = CollectionHelper.Initialize<Vector3>(normalIndices.Length, (int i) => normals[(int)normalIndices[i]]);
+					streamWriter.WriteLine();
+					streamWriter.WriteLine("# normals");
+					foreach (Vector3 vector2 in array3)
+					{
+						TextWriter textWriter2 = streamWriter;
+						string format2 = "vn {0} {1} {2}";
+						float x2 = vector2.X;
+						object arg3 = x2.ToString(CultureInfo.InvariantCulture);
+						float y2 = vector2.Y;
+						object arg4 = y2.ToString(CultureInfo.InvariantCulture);
+						float z2 = vector2.Z;
+						textWriter2.WriteLine(format2, arg3, arg4, z2.ToString(CultureInfo.InvariantCulture));
+					}
+					short[] uvIndices = GetUsedVertexAttributes(graphObject, 2);
+					Vector2[] array5 = CollectionHelper.Initialize<Vector2>(uvIndices.Length, (int i) => texCoord0s[(int)uvIndices[i]]); // TODO: Was uvs, texCoord0s might be incorrect!
+					streamWriter.WriteLine();
+					streamWriter.WriteLine("# uvs");
+					foreach (Vector2 vector3 in array5)
+					{
+						streamWriter.WriteLine("vt {0} {1}", (swapU ? (-vector3.X) : vector3.X).ToString(CultureInfo.InvariantCulture), (swapV ? (-vector3.Y) : vector3.Y).ToString(CultureInfo.InvariantCulture));
+					}
+					streamWriter.WriteLine();
+					streamWriter.WriteLine("# faces");
+					int num = 0;
+					foreach (Part part in graphObject)
+					{
+						streamWriter.WriteLine();
+						if (shaders[part.ShaderIndex].MaterialIndex.Max() < 0) // TODO: .Max() may be incorrect!
+						{
+							streamWriter.WriteLine("g part{0}", num++);
+						}
+						else
+						{
+							streamWriter.WriteLine("g part{0}_texture{1}", num++, materials[(int)shaders[(int)part.ShaderIndex].MaterialIndex.Max()].textureIndex); // TODO: .Max() may be incorrect!
+						}
+						Batch primitives = batches[(int)part.BatchIndex];
+						foreach (Primitive primitive in primitives)
+						{
+							PrimitiveType type = primitive.Type;
+							if (type != PrimitiveType.TriangleStrip)
+							{
+								if (type == PrimitiveType.TriangleFan)
+								{
+									streamWriter.WriteLine();
+									streamWriter.WriteLine("# fan 0xA0");
+									int vertex;
+									for (vertex = 2; vertex < primitive.VertexCount; vertex++)
+									{
+										TextWriter textWriter3 = streamWriter;
+										string format3 = "f {0}/{3}/{6} {1}/{4}/{7} {2}/{5}/{8}";
+										object[] array7 = new object[9];
+										array7[0] = posIndices.IndexOfFirst((short pos) => pos == primitive[0].PositionIndex) + 1;
+										array7[1] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex - 1].PositionIndex) + 1;
+										array7[2] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex].PositionIndex) + 1;
+										array7[3] = uvIndices.IndexOfFirst((short uv) => uv == primitive[0].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
+										array7[4] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex - 1].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
+										array7[5] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
+										array7[6] = normalIndices.IndexOfFirst((short normal) => normal == primitive[0].NormalIndex) + 1;
+										array7[7] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex - 1].NormalIndex) + 1;
+										array7[8] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex].NormalIndex) + 1;
+										textWriter3.WriteLine(format3, array7);
+									}
+								}
+							}
+							else
+							{
+								streamWriter.WriteLine();
+								streamWriter.WriteLine("# strip 0x98");
+								bool flag = true;
+								int vertex = 2;
+								while (vertex < primitive.VertexCount)
+								{
+									TextWriter textWriter4 = streamWriter;
+									string format4 = flag ? "f {2}/{5}/{8} {1}/{4}/{7} {0}/{3}/{6}" : "f {0}/{3}/{6} {1}/{4}/{7} {2}/{5}/{8}";
+									object[] array8 = new object[9];
+									array8[0] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex - 2].PositionIndex) + 1;
+									array8[1] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex - 1].PositionIndex) + 1;
+									array8[2] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex].PositionIndex) + 1;
+									array8[3] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex - 2].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
+									array8[4] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex - 1].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
+									array8[5] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
+									array8[6] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex - 2].NormalIndex) + 1;
+									array8[7] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex - 1].NormalIndex) + 1;
+									array8[8] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex].NormalIndex) + 1;
+									textWriter4.WriteLine(format4, array8);
+									vertex++;
+									flag = !flag;
+								}
+							}
+						}
+					}
+				}
+			}
+			if (graphObject.Visible)
+			{
+				for (int n = (int)graphObject.ChildIndex; n >= 0; n = (int)graphObjects[n].ChildIndex)
+				{
+					ExportGraphObject(outputFolder, n, onlyVisible, ignoreTransforms, swapU, swapV);
+				}
+			}
+			for (int nextIndex = (int)graphObject.NextIndex; nextIndex >= 0; nextIndex = (int)graphObjects[nextIndex].NextIndex)
+			{
+				ExportGraphObject(outputFolder, nextIndex, onlyVisible, ignoreTransforms, swapU, swapV);
+			}
+		}
+
+		private short[] GetUsedVertexAttributes(GraphObject graphObject, int attribute)
+		{
+			HashSet<short> hashSet = new HashSet<short>();
+			foreach (Part part in graphObject)
+			{
+				foreach (Primitive primitive in batches[(int)part.BatchIndex])
+				{
+					foreach (Vertex vertex in primitive)
+					{
+						switch (attribute)
+						{
+							case 0:
+								hashSet.Add((short)vertex.PositionIndex);
+								break;
+							case 1:
+								hashSet.Add((short)vertex.NormalIndex);
+								break;
+							case 2:
+								hashSet.Add((short)vertex.UVIndex.Max()); // TODO: .Max() may be incorrect!
+								break;
+						}
+					}
+				}
+			}
+			return hashSet.ToArray<short>();
 		}
 	}
 

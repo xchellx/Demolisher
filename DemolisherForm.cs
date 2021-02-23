@@ -445,6 +445,28 @@ namespace Arookas.Demolisher
 		private void tvw_models_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			btn_unload.Enabled = !(e.Node == null || !(e.Node.Tag is Bin));
+			btn_export.Enabled = (this.btn_unload.Enabled = (e.Node != null && e.Node.Tag is Bin));
 		}
-	}
+
+        private void btn_export_Click(object sender, EventArgs e)
+        {
+			using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog
+			{
+				Description = "Select a folder in which to export the OBJ and texture files.",
+				ShowNewFolderButton = true
+			})
+			{
+				if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+				{
+					using (OBJExportDialog objexportDialog = new OBJExportDialog())
+					{
+						if (objexportDialog.ShowDialog() == DialogResult.OK)
+						{
+							(tvw_models.SelectedNode.Tag as Bin).Export(folderBrowserDialog.SelectedPath, objexportDialog.ExportTextures, objexportDialog.TextureFormat, objexportDialog.ExportGeometry, objexportDialog.OnlyVisible, objexportDialog.IgnoreTransforms, objexportDialog.SwapU, objexportDialog.SwapV);
+						}
+					}
+				}
+			}
+		}
+    }
 }
