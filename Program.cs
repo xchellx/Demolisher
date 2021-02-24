@@ -14,7 +14,7 @@ namespace Arookas.Demolisher
 		public static GLShader EmbossFragmentShader { get; private set; }
 		public static GLShader EmbossVertexShader { get; private set; }
 
-		public static readonly Version Version = new Version(0, 3, 1);
+		public static readonly Version Version = new Version(0, 3, 2);
 
 		[STAThread]
 		static void Main(string[] arguments)
@@ -30,6 +30,7 @@ namespace Arookas.Demolisher
 #endif
 					CommandLine commandLine = new CommandLine(arguments, '+');
 
+					// TODO: +export parameter
 					foreach (var parameter in commandLine)
 					{
 						switch (parameter.Name.ToLowerInvariant())

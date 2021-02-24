@@ -10,7 +10,7 @@ namespace Arookas.Demolisher
 {
 	class GraphObject : IRenderable, IEnumerable<Part>
 	{
-		Part[] parts;
+		public Part[] parts;
 		float unk3;
 
 		public BoundingBox BoundingBox { get; private set; }

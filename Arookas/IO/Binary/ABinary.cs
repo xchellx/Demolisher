@@ -14,11 +14,11 @@ namespace Arookas.IO.Binary
 		{
 			get
 			{
-				if (this.isDisposed)
+				if (isDisposed)
 				{
 					throw new ObjectDisposedException("ABinary");
 				}
-				return this.buffer;
+				return buffer;
 			}
 		}
 
@@ -28,11 +28,11 @@ namespace Arookas.IO.Binary
 		{
 			get
 			{
-				if (this.isDisposed)
+				if (isDisposed)
 				{
 					throw new ObjectDisposedException("ABinary");
 				}
-				return this.stream.Length - this.Position;
+				return stream.Length - Position;
 			}
 		}
 

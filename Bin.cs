@@ -683,7 +683,7 @@ namespace Arookas.Demolisher
 						textWriter2.WriteLine(format2, arg3, arg4, z2.ToString(CultureInfo.InvariantCulture));
 					}
 					short[] uvIndices = GetUsedVertexAttributes(graphObject, 2);
-					Vector2[] array5 = CollectionHelper.Initialize<Vector2>(uvIndices.Length, (int i) => texCoord0s[(int)uvIndices[i]]); // TODO: Was uvs, texCoord0s might be incorrect!
+					Vector2[] array5 = CollectionHelper.Initialize<Vector2>(uvIndices.Length, (int i) => texCoord0s[(int)uvIndices[i]]); // TODO: Because the legacy code only worked with TEXCOORDS0, we ignore TEXCOORDS1. TEXCOORDS1 could be implemented in the future with a format other than OBJ.
 					streamWriter.WriteLine();
 					streamWriter.WriteLine("# uvs");
 					foreach (Vector2 vector3 in array5)
@@ -693,20 +693,24 @@ namespace Arookas.Demolisher
 					streamWriter.WriteLine();
 					streamWriter.WriteLine("# faces");
 					int num = 0;
-					foreach (Part part in graphObject)
+					foreach (Part part in graphObject.parts)
 					{
 						streamWriter.WriteLine();
-						if (shaders[part.ShaderIndex].MaterialIndex.Max() < 0) // TODO: .Max() may be incorrect!
+						for (int texUnit = 0; texUnit < 8; texUnit++)
 						{
-							streamWriter.WriteLine("g part{0}", num++);
+							if (shaders[(int)part.ShaderIndex].MaterialIndex[texUnit] < 0)
+							{
+								streamWriter.WriteLine("g part{0}", num++);
+							}
+							else
+							{
+								streamWriter.WriteLine("g part{0}_texture{1}", num++, materials[(int)shaders[(int)part.ShaderIndex].MaterialIndex[texUnit]].textureIndex);
+							}
 						}
-						else
+						Primitive[] primitives = batches[(int)part.BatchIndex].primitives;
+						for (int m = 0; m < primitives.Length; m++)
 						{
-							streamWriter.WriteLine("g part{0}_texture{1}", num++, materials[(int)shaders[(int)part.ShaderIndex].MaterialIndex.Max()].textureIndex); // TODO: .Max() may be incorrect!
-						}
-						Batch primitives = batches[(int)part.BatchIndex];
-						foreach (Primitive primitive in primitives)
-						{
+							Primitive primitive = primitives[m];
 							PrimitiveType type = primitive.Type;
 							if (type != PrimitiveType.TriangleStrip)
 							{
@@ -715,20 +719,20 @@ namespace Arookas.Demolisher
 									streamWriter.WriteLine();
 									streamWriter.WriteLine("# fan 0xA0");
 									int vertex;
-									for (vertex = 2; vertex < primitive.VertexCount; vertex++)
+									for (vertex = 2; vertex < primitive.vertices.Length; vertex++)
 									{
 										TextWriter textWriter3 = streamWriter;
 										string format3 = "f {0}/{3}/{6} {1}/{4}/{7} {2}/{5}/{8}";
 										object[] array7 = new object[9];
-										array7[0] = posIndices.IndexOfFirst((short pos) => pos == primitive[0].PositionIndex) + 1;
-										array7[1] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex - 1].PositionIndex) + 1;
-										array7[2] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex].PositionIndex) + 1;
-										array7[3] = uvIndices.IndexOfFirst((short uv) => uv == primitive[0].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
-										array7[4] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex - 1].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
-										array7[5] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
-										array7[6] = normalIndices.IndexOfFirst((short normal) => normal == primitive[0].NormalIndex) + 1;
-										array7[7] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex - 1].NormalIndex) + 1;
-										array7[8] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex].NormalIndex) + 1;
+										array7[0] = posIndices.IndexOfFirst((short pos) => pos == primitive.vertices[0].PositionIndex) + 1;
+										array7[1] = posIndices.IndexOfFirst((short pos) => pos == primitive.vertices[vertex - 1].PositionIndex) + 1;
+										array7[2] = posIndices.IndexOfFirst((short pos) => pos == primitive.vertices[vertex].PositionIndex) + 1;
+										array7[3] = uvIndices.IndexOfFirst((short uv) => uv == primitive.vertices[0].UVIndex[0].GetValueOrDefault()) + 1; // TEXCOORD0 (UVIndex[0]) only
+										array7[4] = uvIndices.IndexOfFirst((short uv) => uv == primitive.vertices[vertex - 1].UVIndex[0].GetValueOrDefault()) + 1; // TEXCOORD0 (UVIndex[0]) only
+										array7[5] = uvIndices.IndexOfFirst((short uv) => uv == primitive.vertices[vertex].UVIndex[0].GetValueOrDefault()) + 1; // TEXCOORD0 (UVIndex[0]) only
+										array7[6] = normalIndices.IndexOfFirst((short normal) => normal == primitive.vertices[0].NormalIndex) + 1;
+										array7[7] = normalIndices.IndexOfFirst((short normal) => normal == primitive.vertices[vertex - 1].NormalIndex) + 1;
+										array7[8] = normalIndices.IndexOfFirst((short normal) => normal == primitive.vertices[vertex].NormalIndex) + 1;
 										textWriter3.WriteLine(format3, array7);
 									}
 								}
@@ -739,20 +743,20 @@ namespace Arookas.Demolisher
 								streamWriter.WriteLine("# strip 0x98");
 								bool flag = true;
 								int vertex = 2;
-								while (vertex < primitive.VertexCount)
+								while (vertex < primitive.vertices.Length)
 								{
 									TextWriter textWriter4 = streamWriter;
 									string format4 = flag ? "f {2}/{5}/{8} {1}/{4}/{7} {0}/{3}/{6}" : "f {0}/{3}/{6} {1}/{4}/{7} {2}/{5}/{8}";
 									object[] array8 = new object[9];
-									array8[0] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex - 2].PositionIndex) + 1;
-									array8[1] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex - 1].PositionIndex) + 1;
-									array8[2] = posIndices.IndexOfFirst((short pos) => pos == primitive[vertex].PositionIndex) + 1;
-									array8[3] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex - 2].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
-									array8[4] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex - 1].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
-									array8[5] = uvIndices.IndexOfFirst((short uv) => uv == primitive[vertex].UVIndex.Max()) + 1; // TODO: .Max() may be incorrect!
-									array8[6] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex - 2].NormalIndex) + 1;
-									array8[7] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex - 1].NormalIndex) + 1;
-									array8[8] = normalIndices.IndexOfFirst((short normal) => normal == primitive[vertex].NormalIndex) + 1;
+									array8[0] = posIndices.IndexOfFirst((short pos) => pos == primitive.vertices[vertex - 2].PositionIndex) + 1;
+									array8[1] = posIndices.IndexOfFirst((short pos) => pos == primitive.vertices[vertex - 1].PositionIndex) + 1;
+									array8[2] = posIndices.IndexOfFirst((short pos) => pos == primitive.vertices[vertex].PositionIndex) + 1;
+									array8[3] = uvIndices.IndexOfFirst((short uv) => uv == primitive.vertices[vertex - 2].UVIndex[0].GetValueOrDefault()) + 1; // TEXCOORD0 (UVIndex[0]) only
+									array8[4] = uvIndices.IndexOfFirst((short uv) => uv == primitive.vertices[vertex - 1].UVIndex[0].GetValueOrDefault()) + 1; // TEXCOORD0 (UVIndex[0]) only
+									array8[5] = uvIndices.IndexOfFirst((short uv) => uv == primitive.vertices[vertex].UVIndex[0].GetValueOrDefault()) + 1; // TEXCOORD0 (UVIndex[0]) only
+									array8[6] = normalIndices.IndexOfFirst((short normal) => normal == primitive.vertices[vertex - 2].NormalIndex) + 1;
+									array8[7] = normalIndices.IndexOfFirst((short normal) => normal == primitive.vertices[vertex - 1].NormalIndex) + 1;
+									array8[8] = normalIndices.IndexOfFirst((short normal) => normal == primitive.vertices[vertex].NormalIndex) + 1;
 									textWriter4.WriteLine(format4, array8);
 									vertex++;
 									flag = !flag;
@@ -778,22 +782,22 @@ namespace Arookas.Demolisher
 		private short[] GetUsedVertexAttributes(GraphObject graphObject, int attribute)
 		{
 			HashSet<short> hashSet = new HashSet<short>();
-			foreach (Part part in graphObject)
+			foreach (Part part in graphObject.parts)
 			{
-				foreach (Primitive primitive in batches[(int)part.BatchIndex])
+				foreach (Primitive primitive in batches[(int)part.BatchIndex].primitives)
 				{
-					foreach (Vertex vertex in primitive)
+					foreach (Vertex vertex in primitive.vertices)
 					{
 						switch (attribute)
 						{
 							case 0:
-								hashSet.Add((short)vertex.PositionIndex);
+								hashSet.Add(vertex.PositionIndex.GetValueOrDefault());
 								break;
 							case 1:
-								hashSet.Add((short)vertex.NormalIndex);
+								hashSet.Add(vertex.NormalIndex.GetValueOrDefault());
 								break;
 							case 2:
-								hashSet.Add((short)vertex.UVIndex.Max()); // TODO: .Max() may be incorrect!
+								hashSet.Add(vertex.UVIndex[0].GetValueOrDefault()); // TEXCOORD0 (UVIndex[0]) only
 								break;
 						}
 					}

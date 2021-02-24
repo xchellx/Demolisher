@@ -9,7 +9,7 @@ namespace Arookas.Demolisher
 {
 	class Batch : IEnumerable<Primitive>
 	{
-		Primitive[] primitives;
+		public Primitive[] primitives;
 		byte positions;
 
 		public BatchAttributes Attributes { get; private set; }

@@ -9,7 +9,7 @@ namespace Arookas.Demolisher
 {
 	class Primitive : IEnumerable<Vertex>
 	{
-		Vertex[] vertices;
+		public Vertex[] vertices;
 
 		public PrimitiveType Type { get; private set; }
 
