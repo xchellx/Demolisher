@@ -19,6 +19,8 @@ There is an option to invert the pitch controls.
 ### Export
 **TODO:** *Help section on export functionality*
 
+**NOTE:** Wrap mode for materials are not considered. This must be manually done from whatever 3D software you plan to import the OBJ to. (ergo, materials that have a wrap mode of CLAMP, MIRROR, or REPEAT will not appear correctly). To see what wrap mode each material has, the wrap mode will be written for each material in the MTL as `# WrapS - ...` and `#WrapT - ...` (open the MTL in a text editor of your choice).
+
 ### Render Flags
 There are certain flags and data in the BIN model format for graph objects which are displayed in _Demolisher_ (some of which can be toggled).
 The supported ones are as follows:

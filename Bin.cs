@@ -617,12 +617,12 @@ namespace Arookas.Demolisher
 			if (graphObject.Visible && graphObject.PartCount > 0)
 			{
 				using (StreamWriter streamWriter = File.CreateText(Path.Combine(outputFolder, string.Format("object{0}.obj", index))))
-				using (StreamWriter streamWriter2 = File.CreateText(Path.Combine(outputFolder, string.Format("object{0}.mtl", index))))
+				using (StreamWriter streamWriter2 = (exportTextures) ? File.CreateText(Path.Combine(outputFolder, string.Format("object{0}.mtl", index))) : null)
 				{
-					streamWriter2.WriteLine("# object{0}.mtl converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
+					if (exportTextures) streamWriter2.WriteLine("# object{0}.mtl converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
 
 					streamWriter.WriteLine("# object{0}.obj converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
-					streamWriter.WriteLine("mtllib object{0}.mtl", index);
+					if (exportTextures) streamWriter.WriteLine("mtllib object{0}.mtl", index);
 					short[] posIndices = GetUsedVertexAttributes(graphObject, 0);
 					Vector3[] array = CollectionHelper.Initialize<Vector3>(posIndices.Length, (int i) => positions[(int)posIndices[i]]);
 					if (!ignoreTransforms)
@@ -697,27 +697,30 @@ namespace Arookas.Demolisher
 
 								// Start faces group with texture material (smoothing off)
 								streamWriter.WriteLine("g object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
-								streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
+								if (exportTextures) streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
 								streamWriter.WriteLine("s 1");
 
 								// Save texture to file
-								Bitmap tex = textures[objMat.textureIndex].ToBitmap();
-								tex.Save(Path.Combine(outputFolder, string.Format("object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension())), textureFormat);
-								
-								// Write texture material information
-								streamWriter2.WriteLine();
-								streamWriter2.WriteLine("# object{0} - part{1} - texture{2}", index, objIndex, objMat.textureIndex);
-								streamWriter2.WriteLine("# WrapS - {0}", objMat.wrapS.ToString());
-								streamWriter2.WriteLine("# WrapT - {0}", objMat.wrapT.ToString());
-								streamWriter2.WriteLine("newmtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
-								// TODO: Other data such as roughness, specularity, etc. would be used here but I dont have a frame of reference to get these things from this point
-								streamWriter2.WriteLine("Ns 500");
-								streamWriter2.WriteLine("Ka 0.8 0.8 0.8");
-								streamWriter2.WriteLine("Kd 0.8 0.8 0.8");
-								streamWriter2.WriteLine("Ks 0.8 0.8 0.8");
-								streamWriter2.WriteLine("d 1");
-								streamWriter2.WriteLine("illum 2");
-								streamWriter2.WriteLine("map_Kd object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension());
+								if (exportTextures)
+								{
+									Bitmap tex = textures[objMat.textureIndex].ToBitmap();
+									tex.Save(Path.Combine(outputFolder, string.Format("object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension())), textureFormat);
+
+									// Write texture material information
+									streamWriter2.WriteLine();
+									streamWriter2.WriteLine("# object{0} - part{1} - texture{2}", index, objIndex, objMat.textureIndex);
+									streamWriter2.WriteLine("# WrapS - {0}", objMat.wrapS.ToString());
+									streamWriter2.WriteLine("# WrapT - {0}", objMat.wrapT.ToString());
+									streamWriter2.WriteLine("newmtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
+									// TODO: Other data such as roughness, specularity, etc. would be used here but I dont have a frame of reference to get these things from this point
+									streamWriter2.WriteLine("Ns 500");
+									streamWriter2.WriteLine("Ka 0.8 0.8 0.8");
+									streamWriter2.WriteLine("Kd 0.8 0.8 0.8");
+									streamWriter2.WriteLine("Ks 0.8 0.8 0.8");
+									streamWriter2.WriteLine("d 1");
+									streamWriter2.WriteLine("illum 2");
+									streamWriter2.WriteLine("map_Kd object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension());
+								}
 							}
 						}
 						Primitive[] primitives = batches[(int)part.BatchIndex].primitives;
