@@ -697,7 +697,8 @@ namespace Arookas.Demolisher
 
 								// Start faces group with texture material (smoothing off)
 								streamWriter.WriteLine("g object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
-								if (exportTextures) streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
+								// Material definition is still written, even if exportTextures/mtl isnt specified
+								streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
 								streamWriter.WriteLine("s 1");
 
 								// Save texture to file
