@@ -4,6 +4,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
@@ -604,37 +605,24 @@ namespace Arookas.Demolisher
 			{
 				Directory.CreateDirectory(outputFolder);
 			}
-			if (exportTextures)
-			{
-				string text = Path.Combine(outputFolder, "textures");
-				if (!Directory.Exists(text))
-				{
-					Directory.CreateDirectory(text);
-				}
-				for (int i = 0; i < textures.Length; i++)
-				{
-					textures[i].ToBitmap().Save(Path.Combine(text, string.Format("texture {0}.{1}", i, textureFormat.GetExtension())), textureFormat);
-				}
-			}
 			if (exportGeometry)
 			{
-				string text2 = Path.Combine(outputFolder, "geometry");
-				if (!Directory.Exists(text2))
-				{
-					Directory.CreateDirectory(text2);
-				}
-				ExportGraphObject(text2, 0, onlyVisible, ignoreTransforms, swapU, swapV);
+				ExportGraphObject(outputFolder, 0, onlyVisible, ignoreTransforms, swapU, swapV, exportTextures, textureFormat);
 			}
 		}
 
-		private void ExportGraphObject(string outputFolder, int index, bool onlyVisible, bool ignoreTransforms, bool swapU, bool swapV)
+		private void ExportGraphObject(string outputFolder, int index, bool onlyVisible, bool ignoreTransforms, bool swapU, bool swapV, bool exportTextures, ImageFormat textureFormat)
 		{
 			GraphObject graphObject = graphObjects[index];
 			if (graphObject.Visible && graphObject.PartCount > 0)
 			{
-				using (StreamWriter streamWriter = File.CreateText(Path.Combine(outputFolder, string.Format("object {0}.obj", index))))
+				using (StreamWriter streamWriter = File.CreateText(Path.Combine(outputFolder, string.Format("object{0}.obj", index))))
+				using (StreamWriter streamWriter2 = File.CreateText(Path.Combine(outputFolder, string.Format("object{0}.mtl", index))))
 				{
-					streamWriter.WriteLine("# object {0}.obj converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
+					streamWriter2.WriteLine("# object{0}.mtl converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
+
+					streamWriter.WriteLine("# object{0}.obj converted at {1} using Demolisher v{2} by arookas", index, DateTime.Now, Program.Version);
+					streamWriter.WriteLine("mtllib object{0}.mtl", index);
 					short[] posIndices = GetUsedVertexAttributes(graphObject, 0);
 					Vector3[] array = CollectionHelper.Initialize<Vector3>(posIndices.Length, (int i) => positions[(int)posIndices[i]]);
 					if (!ignoreTransforms)
@@ -700,11 +688,36 @@ namespace Arookas.Demolisher
 						{
 							if (shaders[(int)part.ShaderIndex].MaterialIndex[texUnit] < 0)
 							{
-								streamWriter.WriteLine("g part{0}", num++);
+								streamWriter.WriteLine("g object{0}_part{1}", index, num++);
 							}
 							else
 							{
-								streamWriter.WriteLine("g part{0}_texture{1}", num++, materials[(int)shaders[(int)part.ShaderIndex].MaterialIndex[texUnit]].textureIndex);
+								int objIndex = num++;
+								Material objMat = materials[(int)shaders[(int)part.ShaderIndex].MaterialIndex[texUnit]];
+
+								// Start faces group with texture material (smoothing off)
+								streamWriter.WriteLine("g object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
+								streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
+								streamWriter.WriteLine("s 1");
+
+								// Save texture to file
+								Bitmap tex = textures[objMat.textureIndex].ToBitmap();
+								tex.Save(Path.Combine(outputFolder, string.Format("object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension())), textureFormat);
+								
+								// Write texture material information
+								streamWriter2.WriteLine();
+								streamWriter2.WriteLine("# object{0} - part{1} - texture{2}", index, objIndex, objMat.textureIndex);
+								streamWriter2.WriteLine("# WrapS - {0}", objMat.wrapS.ToString());
+								streamWriter2.WriteLine("# WrapT - {0}", objMat.wrapT.ToString());
+								streamWriter2.WriteLine("newmtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
+								// TODO: Other data such as roughness, specularity, etc. would be used here but I dont have a frame of reference to get these things from this point
+								streamWriter2.WriteLine("Ns 500");
+								streamWriter2.WriteLine("Ka 0.8 0.8 0.8");
+								streamWriter2.WriteLine("Kd 0.8 0.8 0.8");
+								streamWriter2.WriteLine("Ks 0.8 0.8 0.8");
+								streamWriter2.WriteLine("d 1");
+								streamWriter2.WriteLine("illum 2");
+								streamWriter2.WriteLine("map_Kd object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension());
 							}
 						}
 						Primitive[] primitives = batches[(int)part.BatchIndex].primitives;
@@ -770,12 +783,12 @@ namespace Arookas.Demolisher
 			{
 				for (int n = (int)graphObject.ChildIndex; n >= 0; n = (int)graphObjects[n].ChildIndex)
 				{
-					ExportGraphObject(outputFolder, n, onlyVisible, ignoreTransforms, swapU, swapV);
+					ExportGraphObject(outputFolder, n, onlyVisible, ignoreTransforms, swapU, swapV, exportTextures, textureFormat);
 				}
 			}
 			for (int nextIndex = (int)graphObject.NextIndex; nextIndex >= 0; nextIndex = (int)graphObjects[nextIndex].NextIndex)
 			{
-				ExportGraphObject(outputFolder, nextIndex, onlyVisible, ignoreTransforms, swapU, swapV);
+				ExportGraphObject(outputFolder, nextIndex, onlyVisible, ignoreTransforms, swapU, swapV, exportTextures, textureFormat);
 			}
 		}
 
