@@ -1,4 +1,4 @@
-﻿# Demolisher v0.3.3
+﻿# Demolisher v0.3.4
 
 ## Summary
 
