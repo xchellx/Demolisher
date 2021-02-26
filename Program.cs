@@ -14,7 +14,7 @@ namespace Arookas.Demolisher
 		public static GLShader EmbossFragmentShader { get; private set; }
 		public static GLShader EmbossVertexShader { get; private set; }
 
-		public static readonly Version Version = new Version(0, 3, 3);
+		public static readonly Version Version = new Version(0, 3, 4);
 
 		[STAThread]
 		static void Main(string[] arguments)

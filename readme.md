@@ -4,7 +4,7 @@
 
 _Demolisher_ an extremely basic viewer for the BIN model format found in [Luigi's Mansion](http://en.wikipedia.org/wiki/Luigi%27s_Mansion).
 The program is capable of opening and viewing one or multiple BIN model files at one time and comes with a bunch of different view modes and options.
-~~Do **not** expect the program to be able to export or convert these models into another format and vice versa.~~ Basic support for exporting to OBJ has been ported from v0.2.0.
+Demolisher also supports exporting to OBJ with MTL. It cannot create BIN models. The OBJ output is not compatible with the game.
 
 This program makes use of [OpenTK](http://www.opentk.com) for rendering and input.
 
@@ -16,10 +16,20 @@ Holding shift while pressing any of the movement keys while double the camera's 
 To rotate the camera's pitch and yaw, use the arrow keys.
 There is an option to invert the pitch controls.
 
-### Export
-**TODO:** *Help section on export functionality*
+### Export OBJ
+> ![OBJ Export Dialog v0.3.4](OBJExportDialog_v0.3.4.png)
+> 
+> *OBJ Export Dialog in v0.3.4*
 
-**NOTE:** Wrap mode for materials are not considered. This must be manually done from whatever 3D software you plan to import the OBJ to. (ergo, materials that have a wrap mode of CLAMP, MIRROR, or REPEAT will not appear correctly). To see what wrap mode each material has, the wrap mode will be written for each material in the MTL as `# WrapS - ...` and `#WrapT - ...` (open the MTL in a text editor of your choice).
+- **Export textures:** If enabled, all textures of the objects will be exported.
+  - **Format:** The format for which each texture will export to. Selectable formats are: PNG, TIFF, BMP, and JPEG.
+- **Export geometry:** If enabled, all geometry of the objects will be exported.
+  - **Only visible objects:** Export the geometry of only the visible objects (only checkbox'd objects)
+  - **Ignore object transforms:** Do not export objects via the position they appear visually (every object will export at origin 0,0,0).
+  - **Swap U:** Swap UV horizontal coordinates.
+  - **Swap V:** Swap UV vertical coordinates.
+
+**NOTE:** Wrap mode for materials are not considered. This must be manually done from whatever 3D software you plan to import the OBJ to. (ergo, materials that have a wrap mode of CLAMP, MIRROR, or REPEAT will not appear correctly). To see what wrap mode each material has, the wrap mode will be written for each material in the MTL as `# WrapS - ...` and `# WrapT - ...` (open the MTL in a text editor of your choice).
 
 ### Render Flags
 There are certain flags and data in the BIN model format for graph objects which are displayed in _Demolisher_ (some of which can be toggled).

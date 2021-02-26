@@ -693,13 +693,14 @@ namespace Arookas.Demolisher
 							else
 							{
 								int objIndex = num++;
-								Material objMat = materials[(int)shaders[(int)part.ShaderIndex].MaterialIndex[texUnit]];
+								Shader objShd = shaders[(int)part.ShaderIndex];
+								Material objMat = materials[objShd.MaterialIndex[texUnit]];
 
 								// Start faces group with texture material (smoothing off)
 								streamWriter.WriteLine("g object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
 								// Material definition is still written, even if exportTextures/mtl isnt specified
-								streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
-								streamWriter.WriteLine("s 1");
+								streamWriter.WriteLine("usemtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex); // We still specify a material, so one can add textures later
+								streamWriter.WriteLine("s 1"); // Smoothing groups on, so groups are imported and not ignored
 
 								// Save texture to file
 								if (exportTextures)
@@ -713,13 +714,12 @@ namespace Arookas.Demolisher
 									streamWriter2.WriteLine("# WrapS - {0}", objMat.wrapS.ToString());
 									streamWriter2.WriteLine("# WrapT - {0}", objMat.wrapT.ToString());
 									streamWriter2.WriteLine("newmtl object{0}_part{1}_texture{2}", index, objIndex, objMat.textureIndex);
-									// TODO: Other data such as roughness, specularity, etc. would be used here but I dont have a frame of reference to get these things from this point
-									streamWriter2.WriteLine("Ns 500");
-									streamWriter2.WriteLine("Ka 0.8 0.8 0.8");
-									streamWriter2.WriteLine("Kd 0.8 0.8 0.8");
-									streamWriter2.WriteLine("Ks 0.8 0.8 0.8");
-									streamWriter2.WriteLine("d 1");
-									streamWriter2.WriteLine("illum 2");
+									streamWriter2.WriteLine("Ka 1.000000 1.000000 1.000000");
+									streamWriter2.WriteLine("Kd {0} {1} {2}", Color.ToScale(objShd.Tint.R).ToString("0.000000"),
+																			  Color.ToScale(objShd.Tint.G).ToString("0.000000"),
+																			  Color.ToScale(objShd.Tint.B).ToString("0.000000"));
+									streamWriter2.WriteLine("d {0}", Color.ToScale(objShd.Tint.A).ToString("0.000000"));
+									streamWriter2.WriteLine("illum 1");
 									streamWriter2.WriteLine("map_Kd object{0}_part{1}_texture{2}.{3}", index, objIndex, objMat.textureIndex, textureFormat.GetExtension());
 								}
 							}

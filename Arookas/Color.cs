@@ -343,6 +343,18 @@ namespace Arookas
 			return new Color((int)(rgba8 >> 24 & 255U), (int)(rgba8 >> 16 & 255U), (int)(rgba8 >> 8 & 255U), (int)(rgba8 & 255U));
 		}
 
+		// Token: NONE RID: NONE RVA: NONE File Offset: NONE
+		public static float ToScale(int clr)
+		{
+			return clr / 255.0f;
+		}
+
+		// Token: NONE RID: NONE RVA: NONE File Offset: NONE
+		public static int ToValue(float clr)
+		{
+			return System.Math.Max(0, System.Math.Min(255, (int)System.Math.Floor(clr * 256.0)));
+		}
+
 		// Token: 0x060000F8 RID: 248 RVA: 0x00003EF4 File Offset: 0x000020F4
 		public static Color[] FromST3C1(ulong st3c1)
 		{

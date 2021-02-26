@@ -68,6 +68,7 @@
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
+    <Content Include="OBJExportDialog_v0.3.4.png" />
     <Content Include="RefLib\Arookas 0.9\Arookas.dll" />
     <Content Include="RefLib\Arookas 1.0\Arookas.dll" />
     <Content Include="RefLib\arookas 1.1\arookas.dll" />
