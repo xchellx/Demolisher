@@ -445,7 +445,8 @@ namespace Arookas.Demolisher
 		private void tvw_models_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			btn_unload.Enabled = !(e.Node == null || !(e.Node.Tag is Bin));
-			btn_export.Enabled = (this.btn_unload.Enabled = (e.Node != null && e.Node.Tag is Bin));
+			btn_export.Enabled = (btn_unload.Enabled = (e.Node != null && e.Node.Tag is Bin));
+			btn_info.Enabled = (e.Node != null && (e.Node.Tag is Bin || e.Node.Tag is GraphObject));
 		}
 
         private void btn_export_Click(object sender, EventArgs e)
@@ -466,6 +467,33 @@ namespace Arookas.Demolisher
 						}
 					}
 				}
+			}
+		}
+
+        private void btn_info_Click(object sender, EventArgs e)
+        {
+			if (tvw_models.SelectedNode.Tag is Bin)
+			{
+				Bin binMdl = (tvw_models.SelectedNode.Tag as Bin);
+				MessageBox.Show($"Name: {binMdl.Name}\n"
+							  + $"Visible: {binMdl.Visible}\n"
+							  + $"Position: {binMdl.Position}\n"
+							  + $"Rotation: {binMdl.Rotation}\n"
+							  + $"Scale: {binMdl.Scale}",
+							    $"Information of BIN model '{binMdl.Name}'", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+			else
+			{
+				GraphObject gObj = (tvw_models.SelectedNode.Tag as GraphObject);
+				string rFlags = Enum.GetName(typeof(GraphObjectRenderFlags), gObj.RenderFlags);
+				MessageBox.Show($"Visible: {gObj.Visible}\n"
+							  + $"RenderFlags: {rFlags ?? "Unknown"}\n"
+							  + $"PartCount: {gObj.PartCount}\n"
+							  + $"BoundingBox: Min: {gObj.BoundingBox.Min}, Max: {gObj.BoundingBox.Max}\n"
+							  + $"Position: {gObj.Position}\n"
+							  + $"Rotation: {gObj.Rotation}\n"
+							  + $"Scale: {gObj.Scale}",
+								$"Information of BIN Graph{tvw_models.SelectedNode.Text}", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
     }

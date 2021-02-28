@@ -48,6 +48,7 @@
             this.str_main = new System.Windows.Forms.ToolStrip();
             this.btn_import = new System.Windows.Forms.ToolStripButton();
             this.btn_unload = new System.Windows.Forms.ToolStripButton();
+            this.btn_info = new System.Windows.Forms.ToolStripButton();
             this.btn_export = new System.Windows.Forms.ToolStripButton();
             this.men_main.SuspendLayout();
             this.pan_controls.SuspendLayout();
@@ -252,6 +253,7 @@
             this.str_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_import,
             this.btn_unload,
+            this.btn_info,
             this.btn_export});
             this.str_main.Location = new System.Drawing.Point(0, 0);
             this.str_main.Name = "str_main";
@@ -279,6 +281,17 @@
             this.btn_unload.Text = "Unload";
             this.btn_unload.ToolTipText = "Unload the select BIN model";
             this.btn_unload.Click += new System.EventHandler(this.btn_unload_Click);
+            // 
+            // btn_info
+            // 
+            this.btn_info.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btn_info.Enabled = false;
+            this.btn_info.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_info.Name = "btn_info";
+            this.btn_info.Size = new System.Drawing.Size(39, 24);
+            this.btn_info.Text = "Info";
+            this.btn_info.ToolTipText = "Get information of the selected BIN model";
+            this.btn_info.Click += new System.EventHandler(this.btn_info_Click);
             // 
             // btn_export
             // 
@@ -339,5 +352,6 @@
 		private System.Windows.Forms.ToolStripMenuItem btn_nbt;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btn_export;
+        private System.Windows.Forms.ToolStripButton btn_info;
     }
 }
